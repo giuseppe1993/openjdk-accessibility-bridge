@@ -49,6 +49,7 @@ public class ATKWindowEventListener implements WindowListener {
 	public ATKWindowEventListener() {
 		super();
 		//TODO I don't know how create new ATKWindows 
+		
 		cObject= initAtkWindows();
 	}
 

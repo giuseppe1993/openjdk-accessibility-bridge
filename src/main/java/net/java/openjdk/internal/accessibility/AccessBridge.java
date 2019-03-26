@@ -37,6 +37,7 @@ public class AccessBridge {
     
     static {
         System.loadLibrary("OpenJDKAccessBridge");
+        
         //I don't know why I've a runtime Warning on the root
         inizialaized = initATK();
         System.err.println(inizialaized);

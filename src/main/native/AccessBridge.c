@@ -28,20 +28,36 @@
 
 #include <jni.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <atk/atk.h>
 #include <atk-bridge.h>
 #include "AccessBridge.h"
+
+static void
+set_root (void){
+	static GObject *groot=NULL;
+	static AtkObject *root=NULL;
+
+	if(!groot){
+		groot=g_object_new (ATK_TYPE_GOBJECT_ACCESSIBLE, NULL);
+		root =atk_gobject_accessible_for_object(groot);
+		atk_object_initialize (root, NULL);
+	}
+}
 
 JNIEXPORT jboolean JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
+	set_root;
+
 	gboolean initATK = atk_bridge_adaptor_init (NULL, NULL);
 
 	if(initATK)
-		printf("Initialized\n",&initATK);
+		fprintf(stderr,"Initialized\n");
 	else
-		printf("Not Initialized\n",&initATK);
+		fprintf(stderr,"Not Initialized\n");
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
