@@ -12,9 +12,9 @@ mvn clean package
 
 ```
 download source OpenJDK 
-Build OpenJdk
-set Variabile JDK11_DEV = OpenJDK_source_path/build/linux-x86_64-normal-server-release/images
-``` 
+Build OpenJDK
+Set Variabile JDK11_DEV = [OpenJDK_source_path]/build/linux-x86_64-normal-server-release/images
+```
 
 ## Run against j2demo
 
