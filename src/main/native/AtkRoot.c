@@ -7,11 +7,11 @@
 
 #include "AtkRoot.h"
 
-struct _CAtkRootPrivate
+typedef struct
 {
    /* g_type_add_instance_private requires private_size > 0 */
    gint pad;
-};
+} CAtkRootPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (CAtkRoot, c_atk_root, ATK_TYPE_OBJECT)
 
@@ -43,9 +43,6 @@ atk_root_initialize(AtkObject *self, gpointer null)
 static void
 atk_root_finalize (GObject *object)
 {
-  /* CAtkRoot *self = (CAtkRoot *)object; */
-  /* CAtkRootPrivate *priv = c_atk_root_get_instance_private (self); */
-
   G_OBJECT_CLASS (c_atk_root_parent_class)->finalize (object);
 }
 

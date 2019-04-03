@@ -79,9 +79,9 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
-    /* I need to run mainloop on separate thred
-     * mainloop = g_main_loop_new (NULL, FALSE);
-    g_main_loop_run (mainloop);*/
+    //I need to run mainloop on separate thred
+    mainloop = g_main_loop_new (NULL, FALSE);
+    g_main_loop_run (mainloop);
 
     /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
     (*env)->GetJavaVM(env, &bridge->jvm);*/
