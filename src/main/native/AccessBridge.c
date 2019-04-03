@@ -30,41 +30,63 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <atk/atk.h>
 #include <atk-bridge.h>
-#include "AccessBridge.h"
+#include "AtkRoot.h"
+
+static CAtkRoot * root = NULL;
+static GMainLoop *mainloop;
+
+static AtkObject *
+get_root (void)
+{
+	if (!root){
+           root = c_atk_root_new ();
+	}
+	return ATK_OBJECT(root);
+}
+
+const gchar *
+get_toolkit_name (void)
+{
+  return strdup ("My ATK-UTIL");
+}
 
 static void
-set_root (void){
-	static GObject *groot=NULL;
-	static AtkObject *root=NULL;
+setup_atk_util (void)
+{
+  AtkUtilClass *klass;
 
-	if(!groot){
-		groot=g_object_new (ATK_TYPE_GOBJECT_ACCESSIBLE, NULL);
-		root =atk_gobject_accessible_for_object(groot);
-		atk_object_initialize (root, NULL);
-	}
+  klass = g_type_class_ref (ATK_TYPE_UTIL);
+  klass->get_root = get_root;
+  klass->get_toolkit_name = get_toolkit_name;
+  g_type_class_unref (klass);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
-	set_root;
+	setup_atk_util();
 
-	gboolean initATK = atk_bridge_adaptor_init (NULL, NULL);
+	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
 
-	if(initATK)
+	/*
+	if( init_outcome == 0 )
 		fprintf(stderr,"Initialized\n");
 	else
 		fprintf(stderr,"Not Initialized\n");
+	*/
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
-    OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
-    (*env)->GetJavaVM(env, &bridge->jvm);
+    /* I need to run mainloop on separate thred
+     * mainloop = g_main_loop_new (NULL, FALSE);
+    g_main_loop_run (mainloop);*/
 
-    return initATK;
+    /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
+    (*env)->GetJavaVM(env, &bridge->jvm);*/
+
+    return !init_outcome;
 
 }
 
