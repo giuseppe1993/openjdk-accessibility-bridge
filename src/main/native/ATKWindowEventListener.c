@@ -3,16 +3,21 @@
 #include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <atk-bridge.h>
+#include <atk/atk.h>
+#include "AtkWindow.h"
+
+static CAtkWindow * window = NULL;
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindows
-	(JNIEnv *env, jclass ATKWindowEventListenerclass)
+	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
 {
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindows\n");
-
-    return 0;
+    if (!window)
+    	window = c_atk_window_new ();
+    atk_object_set_parent(ATK_OBJECT(window),ATK_OBJECT(root));
+    return window;
 
 }
 

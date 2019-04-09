@@ -31,20 +31,20 @@ import com.sun.java.accessibility.util.SwingEventMonitor;
 
 public class AccessBridge {
 
-    private static native boolean initATK();
+    private static native long initATK();
     private static native void freeATK();
-    private static boolean inizialaized;
+    private static long atkRoot;
     
     static {
         System.loadLibrary("OpenJDKAccessBridge");
         
-        inizialaized = initATK();
-        System.err.println(inizialaized);
+        atkRoot = initATK();
+        System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
     
     public AccessBridge() {
         EventQueueMonitor.isGUIInitialized();
-        SwingEventMonitor.addWindowListener(new ATKWindowEventListener());
+        SwingEventMonitor.addWindowListener(new ATKWindowEventListener(atkRoot));
     }
     
     @Override

@@ -34,7 +34,6 @@
 #include "AtkRoot.h"
 
 static CAtkRoot * root = NULL;
-static GMainLoop *mainloop;
 
 static AtkObject *
 get_root (void)
@@ -62,7 +61,7 @@ setup_atk_util (void)
   g_type_class_unref (klass);
 }
 
-JNIEXPORT jboolean JNICALL
+JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
@@ -79,14 +78,13 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
-    //I need to run mainloop on separate thred
-    mainloop = g_main_loop_new (NULL, FALSE);
-    g_main_loop_run (mainloop);
+    /*mainloop = g_main_loop_new (NULL, FALSE);
+    g_main_loop_run (mainloop);*/
 
     /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
     (*env)->GetJavaVM(env, &bridge->jvm);*/
 
-    return !init_outcome;
+    return root;
 
 }
 

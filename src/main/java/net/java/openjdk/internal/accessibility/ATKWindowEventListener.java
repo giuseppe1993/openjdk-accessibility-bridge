@@ -34,7 +34,7 @@ import javax.accessibility.AccessibleContext;
 
 public class ATKWindowEventListener implements WindowListener {
 	
-	private static native long initAtkWindows();
+	private static native long initAtkWindows(long root);
 	private static native void freeAtkWindows(long cObject);
 	private static native void atkWindowOpened(long cObject, String description);
 	private static native void atkWindowClosing(long cObject, String description);
@@ -46,11 +46,10 @@ public class ATKWindowEventListener implements WindowListener {
 	
 	private long cObject;
 	
-	public ATKWindowEventListener() {
+	public ATKWindowEventListener(long root) {
 		super();
-		//TODO I don't know how create new ATKWindows 
-		
-		cObject= initAtkWindows();
+		cObject= initAtkWindows(root);
+		System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
 	}
 
     @Override
