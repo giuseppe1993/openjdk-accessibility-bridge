@@ -91,6 +91,7 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_freeATK(JNIEnv *env, jclass AccessBridgeClass)
 {
+	g_object_unref(root);
 	atk_bridge_adaptor_cleanup();
 }
 

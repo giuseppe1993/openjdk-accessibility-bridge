@@ -31,12 +31,13 @@ import java.awt.event.WindowListener;
 
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleRole;
 
 public class ATKWindowEventListener implements WindowListener {
 	
 	private static native long initAtkWindows(long root);
 	private static native void freeAtkWindows(long cObject);
-	private static native void atkWindowOpened(long cObject, String description);
+	private static native void atkWindowOpened(long cObject, String name, String description);
 	private static native void atkWindowClosing(long cObject, String description);
 	private static native void atkWindowClosed(long cObject, String description);
 	private static native void atkWindowIconified(long cObject, String description);
@@ -58,11 +59,20 @@ public class ATKWindowEventListener implements WindowListener {
         if (window instanceof Accessible) {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
+            AccessibleContext child = ac.getAccessibleChild(0).getAccessibleContext();
+            AccessibleRole accessibleRole = ac.getAccessibleRole();
+            System.err.println(accessibleRole.toString());
+            accessibleRole = child.getAccessibleRole();
+            int nchild = child.getAccessibleChildrenCount();
+            System.err.println(nchild+accessibleRole.toString());
+            //accessibleRole = parent.getAccessibleRole();
+           // System.err.println(accessibleRole.toString());
             //TODO take all Accessibility content. 
             // I think is better to do a independent method because for every override method you need to extract the informations
-            String description= ac.getAccessibleDescription();
+            String name = ac.getAccessibleName();
+            String description = ac.getAccessibleDescription();
             //TODO push all in C Object
-            atkWindowOpened(cObject, description);
+            atkWindowOpened(cObject, name, description);
         }
     }
 

@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <atk/atk.h>
-#include "AtkWindow.h"
+#include "AtkFrame.h"
 
-static CAtkWindow * window = NULL;
+static CAtkFrame * frame = NULL;
+static const char *utfdesciption;
+static const char *utfname;
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindows
@@ -14,10 +16,10 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindo
 {
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindows\n");
-    if (!window)
-    	window = c_atk_window_new ();
-    atk_object_set_parent(ATK_OBJECT(window),ATK_OBJECT(root));
-    return window;
+    if (!frame)
+    	frame = c_atk_frame_new ();
+    atk_object_set_parent(ATK_OBJECT(frame),ATK_OBJECT(root));
+    return frame;
 
 }
 
@@ -25,23 +27,33 @@ JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkWindows
 	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject)
 {
+	g_object_unref(frame);
 	fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkWindows\n");
 
 }
 
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkWindowOpened
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
+	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring name, jstring description)
 {
-    fprintf(stderr, "ATKWindowEventListener_windowOpened description is: ");
-    if (description != NULL){
-    	const char *utfdesciption;
-    	utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
-    	fprintf(stderr, "%s\n", utfdesciption);
-    }
-    else
-    	fprintf(stderr, "NULL\n");
-
+	if (frame == cObject){
+		fprintf(stderr, "ATKWindowEventListener_windowOpened name is:");
+		if (name != NULL){
+			utfname = (*env)->GetStringUTFChars(env, name, NULL);
+			atk_object_set_name(ATK_OBJECT(frame),utfname);
+			fprintf(stderr, "%s ", utfdesciption);
+			}
+		else
+			fprintf(stderr, "NULL ");
+		fprintf(stderr, "description is: ");
+		if (description != NULL){
+			utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
+			atk_object_set_description(ATK_OBJECT(frame),utfdesciption);
+			fprintf(stderr, "%s\n", utfdesciption);
+		}
+		else
+			fprintf(stderr, "NULL\n");
+	}
 }
 
 JNIEXPORT void JNICALL
