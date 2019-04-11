@@ -19,6 +19,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkWindo
     if (!frame)
     	frame = c_atk_frame_new ();
     atk_object_set_parent(ATK_OBJECT(frame),ATK_OBJECT(root));
+    g_object_ref (frame);
     return frame;
 
 }

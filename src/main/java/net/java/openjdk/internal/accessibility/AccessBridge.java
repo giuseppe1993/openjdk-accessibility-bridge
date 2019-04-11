@@ -38,7 +38,7 @@ public class AccessBridge {
     static {
         System.loadLibrary("OpenJDKAccessBridge");
         
-        atkRoot = initATK();
+        //atkRoot = initATK();
         System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
     
@@ -51,6 +51,6 @@ public class AccessBridge {
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
     	super.finalize();
-    	freeATK();    	
+    	//freeATK();    	
     }
 }

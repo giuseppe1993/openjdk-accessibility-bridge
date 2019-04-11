@@ -47,13 +47,6 @@ void c_atk_root_remove_child(CAtkRoot *root, AtkObject *obj, gpointer data)
 	g_signal_emit_by_name (root, "children-changed::remove", index, obj, NULL);
 }
 
-/**
- * atkroot_new:
- *
- * Create a new #AtkRoot.
- *
- * Returns: (transfer full): a newly created #AtkRoot
- */
 CAtkRoot *
 c_atk_root_new (void)
 {

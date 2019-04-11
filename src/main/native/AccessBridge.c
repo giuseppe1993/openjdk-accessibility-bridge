@@ -83,6 +83,7 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 
     /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
     (*env)->GetJavaVM(env, &bridge->jvm);*/
+    g_object_ref (root);
 
     return root;
 
