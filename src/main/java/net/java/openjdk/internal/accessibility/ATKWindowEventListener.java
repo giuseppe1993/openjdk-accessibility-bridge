@@ -59,8 +59,9 @@ public class ATKWindowEventListener implements WindowListener {
         AccessibleStateSet states = ac.getAccessibleStateSet();
         int nchild = ac.getAccessibleChildrenCount();
         AccessibleRole accessibleRole = ac.getAccessibleRole();
-        System.err.println("The child have this role: "+accessibleRole.toString()+"\nhave this states: ["+
-        states.toString()+"]\nthe numeber of child is:"+nchild+"\n");
+        AccessibleRole fatherAccessibleRole= ac.getAccessibleParent().getAccessibleContext().getAccessibleRole();
+        System.err.println("The child of: '"+fatherAccessibleRole.toString()+"' have this role: "+accessibleRole.toString()+"\nthis states: ["+
+        states.toString()+"]\nand this numeber of child: "+nchild+"\n");
         if (nchild>0){
             for (int i =0; i<nchild;i++){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
@@ -82,8 +83,8 @@ public class ATKWindowEventListener implements WindowListener {
             int nchild = ac.getAccessibleChildrenCount();
             AccessibleRole accessibleRole = ac.getAccessibleRole();
             System.err.println("Java Root role: "+accessibleRole.toString()+"\nhave this states: ["+
-            states.toString()+"] this position is :[x="+position.getX()+" y="+
-            position.getY()+"]\n and the numeber of child is:"+nchild+"\n");
+            states.toString()+"] the position is: [x="+position.getX()+" y="+
+            position.getY()+"]\nthe numeber of child is:"+nchild+"\n");
 
             for (int i =0; i<nchild;i++){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
