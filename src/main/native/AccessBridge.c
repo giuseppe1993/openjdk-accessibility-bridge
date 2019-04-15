@@ -40,7 +40,7 @@ get_root (void)
 {
 	if (!root)
     root = c_atk_root_new ();
-	
+  
 	return ATK_OBJECT(root);
 }
 
@@ -66,19 +66,20 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
 	setup_atk_util();
-
-	atk_bridge_adaptor_init (NULL, NULL);
-
-    fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
+	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
+  if(init_outcome)
+    root = atk_get_root(); 
+  
+  fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
     /*mainloop = g_main_loop_new (NULL, FALSE);
     g_main_loop_run (mainloop);*/
 
     /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
     (*env)->GetJavaVM(env, &bridge->jvm);*/
-    g_object_ref (root);
+  g_object_ref (root);
 
-    return root;
+  return root;
 
 }
 
