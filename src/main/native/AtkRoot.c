@@ -6,7 +6,6 @@
  */
 
 #include "AtkRoot.h"
-
 #include <gmodule.h>
 
 #define C_ATK_ROOT_GET_PRIVATE(o) (c_atk_root_get_istance_private (o))
@@ -19,7 +18,7 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (CAtkRoot, c_atk_root, ATK_TYPE_OBJECT)
 
-void c_atk_root_add_child(CAtkRoot *root, AtkObject *obj, gpointer data)
+void c_atk_root_add_child(CAtkRoot *root, AtkObject *obj)
 {
 	CAtkRootPrivate *priv = c_atk_root_get_instance_private(root);
 	gint index = -1;
@@ -33,7 +32,7 @@ void c_atk_root_add_child(CAtkRoot *root, AtkObject *obj, gpointer data)
 
 }
 
-void c_atk_root_remove_child(CAtkRoot *root, AtkObject *obj, gpointer data)
+void c_atk_root_remove_child(CAtkRoot *root, AtkObject *obj)
 {
 	CAtkRootPrivate *priv = c_atk_root_get_instance_private(root);
 	gint index = -1;
@@ -121,7 +120,13 @@ c_atk_root_finalize (GObject *object)
 static const char*
 c_atk_root_get_name (AtkObject *obj)
 {
-   return "JAVA ATK ROOT";
+   return "Atk Root";
+}
+
+static const char*
+c_atk_root_get_description()
+{
+	return "this is the description of the root component";
 }
 
 static void
@@ -132,6 +137,7 @@ c_atk_root_class_init (CAtkRootClass *klass)
 
   atk_class->initialize = c_atk_root_initialize;
   atk_class->get_name = c_atk_root_get_name;
+  atk_class->get_description = c_atk_root_get_description;
   atk_class->get_n_children = c_atk_root_get_n_children;
   atk_class->ref_child = c_atk_root_ref_child;
 

@@ -8,7 +8,6 @@
 #ifndef DEMO_FRAME_H_
 #define DEMO_FRAME_H_
 
-
 #include <atk/atk.h>
 #include "fixAtk.h"
 
@@ -26,9 +25,17 @@ struct _CAtkFrameClass
 
 CAtkFrame *c_atk_frame_new (void);
 
-void c_atk_frame_add_child(CAtkFrame *frame, AtkObject *obj, gpointer data);
+void c_atk_frame_add_child (CAtkFrame *frame, AtkObject *obj);
 
-void c_atk_frame_remove_child(CAtkFrame *frame, AtkObject *obj, gpointer data);
+void c_atk_frame_remove_child (CAtkFrame *frame, AtkObject *obj);
+
+void c_atk_frame_add_state (CAtkFrame *frame, AtkStateType state);
+
+void c_atk_frame_remove_state (CAtkFrame *frame, AtkStateType state);
+
+void c_atk_frame_add_attribute (CAtkFrame *frame, AtkAttribute *attribute);
+
+void c_atk_frame_remove_attribute (CAtkFrame *frame, AtkAttribute *attribute);
 
 G_END_DECLS
 

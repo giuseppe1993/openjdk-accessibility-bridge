@@ -1,5 +1,5 @@
 /*
- * AtkFrame.h
+ * AtkWindow.h
  *
  *  Created on: Apr 4, 2019
  *      Author: giuseppe
@@ -25,9 +25,9 @@ struct _CAtkWindowClass
 
 CAtkWindow *c_atk_window_new (void);
 
-void c_atk_window_add_child(CAtkWindow *window, AtkObject *obj, gpointer data);
+void c_atk_window_add_child(CAtkWindow *window, AtkObject *obj);
 
-void c_atk_window_remove_child(CAtkWindow *window, AtkObject *obj, gpointer data);
+void c_atk_window_remove_child(CAtkWindow *window, AtkObject *obj);
 
 G_END_DECLS
 

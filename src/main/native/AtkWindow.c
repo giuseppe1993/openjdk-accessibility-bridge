@@ -1,5 +1,5 @@
 /*
- * AtkFrame.c
+ * AtkWindow.c
  *
  *  Created on: Apr 4, 2019
  *      Author: giuseppe
@@ -19,7 +19,7 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (CAtkWindow, c_atk_window, ATK_TYPE_OBJECT)
 
-void c_atk_window_add_child(CAtkWindow *window, AtkObject *obj, gpointer data)
+void c_atk_window_add_child(CAtkWindow *window, AtkObject *obj)
 {
 	CAtkWindowPrivate *priv = c_atk_window_get_instance_private(window);
 	gint index = -1;
@@ -33,18 +33,18 @@ void c_atk_window_add_child(CAtkWindow *window, AtkObject *obj, gpointer data)
 
 }
 
-void c_atk_window_remove_child(CAtkWindow *frame, AtkObject *obj, gpointer data)
+void c_atk_window_remove_child(CAtkWindow *window, AtkObject *obj)
 {
-	CAtkWindowPrivate *priv = c_atk_window_get_instance_private(frame);
+	CAtkWindowPrivate *priv = c_atk_window_get_instance_private(window);
 	gint index = -1;
 
-	atk_object_set_parent (obj, ATK_OBJECT (frame));
+	atk_object_set_parent (obj, ATK_OBJECT (window));
 
 	priv->accessibleObjects = g_list_remove (priv->accessibleObjects, obj);
 
 	index = g_list_index (priv->accessibleObjects, obj);
 
-	g_signal_emit_by_name (frame, "children-changed::remove", index, obj, NULL);
+	g_signal_emit_by_name (window, "children-changed::remove", index, obj, NULL);
 }
 
 CAtkWindow *
@@ -100,11 +100,11 @@ c_atk_window_ref_child (AtkObject *obj, gint i)
 static void
 c_atk_window_finalize (GObject *object)
 {
-	CAtkWindow *frame = C_ATK_WINDOW(object);
+	CAtkWindow *window = C_ATK_WINDOW(object);
 
 	g_return_if_fail (C_IS_ATK_WINDOW(object));
 
-	CAtkWindowPrivate *priv = c_atk_window_get_instance_private(frame);
+	CAtkWindowPrivate *priv = c_atk_window_get_instance_private(window);
 
 	if (priv->accessibleObjects)
 	{

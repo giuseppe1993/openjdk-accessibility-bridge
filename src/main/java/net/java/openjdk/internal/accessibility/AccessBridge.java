@@ -39,6 +39,7 @@ public class AccessBridge {
         System.loadLibrary("OpenJDKAccessBridge");
         
         atkRoot = initATK();
+        
         System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
     

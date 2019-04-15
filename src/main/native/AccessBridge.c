@@ -33,18 +33,18 @@
 #include <atk-bridge.h>
 #include "AtkRoot.h"
 
-static CAtkRoot * root = NULL;
+static CAtkRoot *root = NULL;
 
-static AtkObject *
+static AtkObject*
 get_root (void)
 {
-	if (!root){
-           root = c_atk_root_new ();
-	}
+	if (!root)
+    root = c_atk_root_new ();
+	
 	return ATK_OBJECT(root);
 }
 
-const gchar *
+static const gchar *
 get_toolkit_name (void)
 {
   return strdup ("My ATK-UTIL");
@@ -67,14 +67,7 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 {
 	setup_atk_util();
 
-	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
-
-	/*
-	if( init_outcome == 0 )
-		fprintf(stderr,"Initialized\n");
-	else
-		fprintf(stderr,"Not Initialized\n");
-	*/
+	atk_bridge_adaptor_init (NULL, NULL);
 
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 

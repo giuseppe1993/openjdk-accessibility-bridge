@@ -6,7 +6,7 @@
 #include <atk/atk.h>
 #include "AtkFrame.h"
 
-static CAtkFrame * frame = NULL;
+static CAtkFrame *frame = NULL;
 static const char *utfdesciption;
 static const char *utfname;
 
