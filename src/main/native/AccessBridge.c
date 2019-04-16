@@ -68,7 +68,12 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
 	setup_atk_util();
 	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
   if(init_outcome)
-    root = atk_get_root(); 
+    if(!root)
+    {
+      fprintf(stderr, "Problems\n");
+      root = atk_get_root(); 
+    }
+    
   
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 

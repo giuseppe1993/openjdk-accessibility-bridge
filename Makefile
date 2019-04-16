@@ -18,11 +18,11 @@ OBJECTS    = $(TARGET:.c=.o)
 
 EXECUTABLE = $(SO_PREFIX)OpenJDKAccessBridge$(SO_SUFFIX)
 
-MYCFLAGS   += `pkg-config --cflags gtk+-2.0 glib-2.0 atk atk-bridge-2.0`
-MYCFLAGS   += `pkg-config gthread-2.0 --cflags `
+MYCFLAGS   += `pkg-config --cflags glib-2.0 atk atk-bridge-2.0`
+MYCFLAGS   += `pkg-config --cflags `
 
-MYLDFLAGS  += `pkg-config --libs gtk+-2.0 glib-2.0 atk atk-bridge-2.0`
-MYLDFLAGS  += `pkg-config gthread-2.0 --libs`
+MYLDFLAGS  += `pkg-config --libs glib-2.0 atk atk-bridge-2.0`
+MYLDFLAGS  += `pkg-config --libs`
 
 .PHONY:
 JNI_LIST = net.java.openjdk.internal.accessibility.AccessBridge net.java.openjdk.internal.accessibility.ATKWindowEventListener

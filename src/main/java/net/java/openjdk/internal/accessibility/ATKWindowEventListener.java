@@ -51,7 +51,7 @@ public class ATKWindowEventListener implements WindowListener {
 	
 	public ATKWindowEventListener(long root) {
 		super();
-		cObject= initAtkWindows(root);
+		//cObject= initAtkWindows(root);
 		System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
 	}
 
@@ -96,7 +96,7 @@ public class ATKWindowEventListener implements WindowListener {
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
             //TODO push all in C Object
-            atkWindowOpened(cObject, name, description);
+            //atkWindowOpened(cObject, name, description);
         }
     }
 
@@ -107,7 +107,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowClosing(cObject, description);
+            //atkWindowClosing(cObject, description);
             //System.err.println("closing: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -119,7 +119,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowClosed(cObject, description);
+            //atkWindowClosed(cObject, description);
             //System.err.println("closed: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -131,7 +131,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowIconified(cObject, description);
+            //atkWindowIconified(cObject, description);
             //System.err.println("iconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -143,7 +143,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowDeiconified(cObject, description);
+            //atkWindowDeiconified(cObject, description);
             //System.err.println("Deiconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -155,7 +155,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowActivated(cObject, description);
+            //atkWindowActivated(cObject, description);
             //System.err.println("activated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -167,7 +167,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleWindow = (Accessible) window;
             AccessibleContext ac = accessibleWindow.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkWindowDeactivated(cObject, description);
+            //atkWindowDeactivated(cObject, description);
             //System.err.println("deactivated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -176,7 +176,7 @@ public class ATKWindowEventListener implements WindowListener {
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
     	super.finalize();
-    	freeAtkWindows(cObject);
+    	//freeAtkWindows(cObject);
     }
 
 }
