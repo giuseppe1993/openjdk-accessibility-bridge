@@ -41,7 +41,7 @@ get_root (void)
   if (!root)
     root = c_atk_root_new ();
   
-	return ATK_OBJECT(root);
+  return ATK_OBJECT(root);
 }
 
 static const gchar *
@@ -66,7 +66,7 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
   setup_atk_util();
-	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
+  int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
   if(init_outcome)
     if(!root)
     {

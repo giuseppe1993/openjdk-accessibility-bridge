@@ -34,7 +34,6 @@ c_atk_frame_add_child(CAtkFrame *frame, AtkObject *obj)
 
 	index = g_list_index (priv->accessibleObjects, obj);
 	g_signal_emit_by_name (frame, "children-changed::add", index, obj, NULL);
-
 }
 
 void
@@ -55,12 +54,11 @@ c_atk_frame_remove_child(CAtkFrame *frame, AtkObject *obj)
 void
 c_atk_frame_add_state(CAtkFrame *frame, AtkStateType state)
 {
-
 	CAtkFramePrivate *priv = c_atk_frame_get_instance_private (frame);
 
-	atk_state_set_add_state(priv->states, state);
+	atk_state_set_add_state (priv->states, state);
 
-	atk_object_notify_state_change( ATK_OBJECT(frame), state, TRUE);
+	atk_object_notify_state_change (ATK_OBJECT(frame), state, TRUE);
 }
 
 void c_atk_frame_remove_state(CAtkFrame *frame, AtkStateType state){
@@ -100,7 +98,6 @@ static void
 c_atk_frame_initialize (AtkObject *self, gpointer null)
 {
 	atk_object_set_role(self,ATK_ROLE_FRAME);
-
 	atk_object_set_parent(self,NULL);
 }
 
