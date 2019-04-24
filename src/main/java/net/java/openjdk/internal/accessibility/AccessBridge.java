@@ -32,14 +32,23 @@ import com.sun.java.accessibility.util.SwingEventMonitor;
 public class AccessBridge {
 
     private static native long initATK();
+    private static native void runMainLoopATK();
+    private static native void stopMainLoopATK();
     private static native void freeATK();
     private static long atkRoot;
+    private static Thread mainloop;
     
     static {
         System.loadLibrary("OpenJDKAccessBridge");
-        
-       // atkRoot = initATK();
-        
+
+        atkRoot = initATK();
+        mainloop = new Thread(new Runnable() {
+            public void run(){
+                runMainLoopATK();
+            }
+        });
+        mainloop.start();
+                
         System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
     
@@ -51,7 +60,12 @@ public class AccessBridge {
     @Override
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
-    	super.finalize();
-    	//freeATK();    	
+        super.finalize();
+        //I don't know if it is enought
+        stopMainLoopATK();
+        mainloop.stop();
+        freeATK();
+        mainloop.destroy();
+         	
     }
 }

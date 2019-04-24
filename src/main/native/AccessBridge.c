@@ -33,15 +33,16 @@
 #include <atk-bridge.h>
 #include "AtkRoot.h"
 
-static CAtkRoot *root = NULL;
+static AtkObject *root = NULL;
+static GMainLoop *mainloop = NULL;
 
 static AtkObject*
 get_root (void)
 {
   if (!root)
-    root = c_atk_root_new ();
+    root = ATK_OBJECT(c_atk_root_new ());
   
-  return ATK_OBJECT(root);
+  return root;
 }
 
 static const gchar *
@@ -82,6 +83,29 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
   (*env)->GetJavaVM(env, &bridge->jvm);*/
   g_object_ref (root);
   return root;
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_AccessBridge_runMainLoopATK(JNIEnv *env, jclass AccessBridgeClass)
+{
+  if(!mainloop){
+    mainloop = g_main_loop_new (NULL, FALSE);
+    mainloop = g_main_loop_ref(mainloop);
+    g_main_loop_run (mainloop);
+  }
+  else
+    if(!g_main_loop_is_running(mainloop))
+      g_main_loop_run (mainloop);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_AccessBridge_stopMainLoopATK(JNIEnv *env, jclass AccessBridgeClass)
+{
+  if( (mainloop) && (g_main_loop_is_running(mainloop)) )
+  {
+    g_main_loop_unref(mainloop);
+    g_main_loop_quit (mainloop);
+  }
 }
 
 JNIEXPORT void JNICALL
