@@ -28,28 +28,71 @@
 
 #include <jni.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <atk-bridge.h>
-#include "AccessBridge.h"
+#include "AtkRoot.h"
 
-JNIEXPORT long JNICALL
+static CAtkRoot *root = NULL;
+
+static AtkObject*
+get_root (void)
+{
+	if (!root)
+    root = c_atk_root_new ();
+  
+	return ATK_OBJECT(root);
+}
+
+static const gchar *
+get_toolkit_name (void)
+{
+  return strdup ("My ATK-UTIL");
+}
+
+static void
+setup_atk_util (void)
+{
+  AtkUtilClass *klass;
+
+  klass = g_type_class_ref (ATK_TYPE_UTIL);
+  klass->get_root = get_root;
+  klass->get_toolkit_name = get_toolkit_name;
+  g_type_class_unref (klass);
+}
+
+JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
-	int initATK = atk_bridge_adaptor_init (NULL, NULL);
+	setup_atk_util();
+	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
+  if(init_outcome)
+    if(!root)
+    {
+      fprintf(stderr, "Problems\n");
+      root = atk_get_root(); 
+    }
+    
+  
+  fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
 
-	if(initATK)
-		printf("Initialized\n",&initATK);
-	else
-		printf("Not Initialized\n",&initATK);
+    /*mainloop = g_main_loop_new (NULL, FALSE);
+    g_main_loop_run (mainloop);*/
 
+    /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
+    (*env)->GetJavaVM(env, &bridge->jvm);*/
+  g_object_ref (root);
+
+  return root;
+
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_AccessBridge_freeATK(JNIEnv *env, jclass AccessBridgeClass)
+{
+	g_object_unref(root);
 	atk_bridge_adaptor_cleanup();
-
-    fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-
-    OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
-    (*env)->GetJavaVM(env, &bridge->jvm);
-
 }
 
 

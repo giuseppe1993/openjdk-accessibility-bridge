@@ -32,16 +32,26 @@ import com.sun.java.accessibility.util.SwingEventMonitor;
 public class AccessBridge {
 
     private static native long initATK();
-    private static long nativeData;
+    private static native void freeATK();
+    private static long atkRoot;
     
     static {
         System.loadLibrary("OpenJDKAccessBridge");
-        nativeData = initATK();
-        System.err.println(nativeData);
+        
+       // atkRoot = initATK();
+        
+        System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
     
     public AccessBridge() {
         EventQueueMonitor.isGUIInitialized();
-        SwingEventMonitor.addWindowListener(new ATKWindowEventListener());
+        SwingEventMonitor.addWindowListener(new ATKWindowEventListener(atkRoot));
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+    	//when the Garbage collector destroy this object destroy also the C object
+    	super.finalize();
+    	//freeATK();    	
     }
 }

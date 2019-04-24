@@ -43,7 +43,7 @@ public class ATKDemoApplication {
                 
                 frame.setTitle("Some Test");
                 frame.getAccessibleContext().setAccessibleDescription("This is a window for testing");
-
+			
                 frame.setVisible(true);
             }
         });
