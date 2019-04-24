@@ -38,7 +38,7 @@ static CAtkRoot *root = NULL;
 static AtkObject*
 get_root (void)
 {
-	if (!root)
+  if (!root)
     root = c_atk_root_new ();
   
 	return ATK_OBJECT(root);
@@ -65,34 +65,30 @@ JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
         jclass AccessBridgeClass)
 {
-	setup_atk_util();
+  setup_atk_util();
 	int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
   if(init_outcome)
     if(!root)
     {
       fprintf(stderr, "Problems\n");
       root = atk_get_root(); 
-    }
-    
+    }    
   
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-
-    /*mainloop = g_main_loop_new (NULL, FALSE);
-    g_main_loop_run (mainloop);*/
-
-    /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
-    (*env)->GetJavaVM(env, &bridge->jvm);*/
+  /*mainloop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (mainloop);*/
+  
+  /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
+  (*env)->GetJavaVM(env, &bridge->jvm);*/
   g_object_ref (root);
-
   return root;
-
 }
 
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_freeATK(JNIEnv *env, jclass AccessBridgeClass)
 {
-	g_object_unref(root);
-	atk_bridge_adaptor_cleanup();
+  g_object_unref(root);
+  atk_bridge_adaptor_cleanup();
 }
 
 
