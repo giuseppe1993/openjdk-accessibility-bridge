@@ -5,8 +5,8 @@
  *      Author: giuseppe
  */
 
-#ifndef _C_ATK_ROOT_H_
-#define _C_ATK_ROOT_H_
+#ifndef ATK_ROOT_H_
+#define ATK_ROOT_H_
 
 #include <atk/atk.h>
 #include "AtkActor.h"
@@ -26,4 +26,4 @@ CAtkRoot *c_atk_root_new (void);
 
 G_END_DECLS
 
-#endif /* ATKROOT_H_ */
+#endif 

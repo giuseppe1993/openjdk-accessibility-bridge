@@ -11,10 +11,8 @@ static const char *utfdesciption;
 static const char *utfname;
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
 {
-
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     	frame = C_ATK_ACTOR(c_atk_frame_new ());
@@ -25,22 +23,18 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject)
 {
 	g_object_unref(frame);
 	fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame\n");
-
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring name, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring name, jstring description)
 {
 	if (frame == cObject){
 		fprintf(stderr, "ATKWindowEventListener_FrameOpened name is:");
-		if (name != NULL)
-		{
+		if (name != NULL){
 			utfname = (*env)->GetStringUTFChars(env, name, NULL);
 			atk_object_set_name(ATK_OBJECT(frame),utfname);
 			fprintf(stderr, "%s ", utfdesciption);
@@ -59,8 +53,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClosing
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClosing (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
 
     fprintf(stderr, "ATKWindowEventListener_FrameClosing description is: ");
@@ -71,14 +64,12 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClos
     }
     else
     	fprintf(stderr, "NULL\n");
-
 }
 
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClosed
 	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
-
     fprintf(stderr, "ATKWindowEventListener_FrameClosed description is: ");
     if (description != NULL){
     	const char *utfdesciption;
@@ -87,14 +78,11 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClos
     }
     else
     	fprintf(stderr, "NULL\n");
-
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameIconified
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameIconified (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
-
     fprintf(stderr, "ATKWindowEventListener_FrameIconified description is: ");
     if (description != NULL){
     	const char *utfdesciption;
@@ -103,14 +91,12 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameIcon
     }
     else
     	fprintf(stderr, "NULL\n");
-
 }
 
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameDeiconified
 	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
-
     fprintf(stderr, "ATKWindowEventListener_FrameDeiconified description is: ");
     if (description != NULL){
     	const char *utfdesciption;
@@ -119,14 +105,11 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameDeic
     }
     else
     	fprintf(stderr, "NULL\n");
-
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameActivated
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameActivated (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
-
     fprintf(stderr, "ATKWindowEventListener_FrameActivated description is: ");
 	if (description != NULL){
 		const char *utfdesciption;
@@ -135,14 +118,11 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameActi
 	}
 	else
 		fprintf(stderr, "NULL\n");
-
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameDeactivated
-	(JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameDeactivated (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
-
     fprintf(stderr, "ATKWindowEventListener_FrameDeactivated description is: ");
     if (description != NULL){
     	const char *utfdesciption;
@@ -151,5 +131,4 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameDeac
     }
     else
     	fprintf(stderr, "NULL\n");
-
 }

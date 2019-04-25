@@ -1,12 +1,6 @@
-/*
- * demo_frame.h
- *
- *  Created on: Apr 10, 2019
- *      Author: giuseppe
- */
 
-#ifndef DEMO_FRAME_H_
-#define DEMO_FRAME_H_
+#ifndef ATK_FRAME_H_
+#define ATK_FRAME_H_
 
 #include <atk/atk.h>
 #include "AtkActor.h"
@@ -26,4 +20,4 @@ CAtkFrame *c_atk_frame_new (void);
 
 G_END_DECLS
 
-#endif /* DEMO_FRAME_H_ */
+#endif 

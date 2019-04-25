@@ -36,24 +36,24 @@ import javax.accessibility.AccessibleRole;
 import javax.accessibility.AccessibleStateSet;
 
 public class ATKWindowEventListener implements WindowListener {
-	
-	private static native long initAtkFrame(long root);
-	private static native void freeAtkFrame(long cObject);
-	private static native void atkFrameOpened(long cObject, String name, String description);
-	private static native void atkFrameClosing(long cObject, String description);
-	private static native void atkFrameClosed(long cObject, String description);
-	private static native void atkFrameIconified(long cObject, String description);
-	private static native void atkFrameDeiconified(long cObject, String description);
-	private static native void atkFrameActivated(long cObject, String description);
-	private static native void atkFrameDeactivated(long cObject, String description);
-	
-	private long cObject;
+    
+    private static native long initAtkFrame(long root);
+    private static native void freeAtkFrame(long cObject);
+    private static native void atkFrameOpened(long cObject, String name, String description);
+    private static native void atkFrameClosing(long cObject, String description);
+    private static native void atkFrameClosed(long cObject, String description);
+    private static native void atkFrameIconified(long cObject, String description);
+    private static native void atkFrameDeiconified(long cObject, String description);
+    private static native void atkFrameActivated(long cObject, String description);
+    private static native void atkFrameDeactivated(long cObject, String description);
+    
+    private long cObject;
 	
 	public ATKWindowEventListener(long root) {
-		super();
-		cObject= initAtkFrame(root);
-		System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
-	}
+        super();
+        cObject= initAtkFrame(root);
+        System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
+    }
 
     void printInformation(AccessibleContext ac){
         AccessibleStateSet states = ac.getAccessibleStateSet();

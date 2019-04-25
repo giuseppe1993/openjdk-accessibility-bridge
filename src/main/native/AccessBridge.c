@@ -63,8 +63,7 @@ setup_atk_util (void)
 }
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
-        jclass AccessBridgeClass)
+Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, jclass AccessBridgeClass)
 {
   setup_atk_util();
   int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
@@ -76,8 +75,8 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
     }    
   
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-  mainloop = g_main_loop_new (NULL, FALSE);
-  g_main_loop_run (mainloop);
+  /*mainloop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (mainloop);*/
   
   /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
   (*env)->GetJavaVM(env, &bridge->jvm);*/

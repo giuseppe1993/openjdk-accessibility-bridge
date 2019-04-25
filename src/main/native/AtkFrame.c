@@ -47,7 +47,6 @@ static void
 c_atk_frame_finalize (GObject *object)
 {
 	g_return_if_fail (C_IS_ATK_FRAME(object));
-	
 	G_OBJECT_CLASS (c_atk_frame_parent_class)->finalize (object);
 }
 
@@ -56,11 +55,9 @@ c_atk_frame_class_init (CAtkFrameClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
-	
 	atk_class->initialize = c_atk_frame_initialize;
 	atk_class->get_name = c_atk_frame_get_name;
 	atk_class->get_description = c_atk_frame_get_description;
-	
 	object_class->finalize = c_atk_frame_finalize;
 }
 
