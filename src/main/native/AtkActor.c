@@ -68,25 +68,18 @@ c_atk_actor_get_n_children (AtkObject *obj)
 static AtkObject*
 c_atk_actor_ref_child (AtkObject *obj, gint i)
 {
-  GList *obj_list = NULL;
-  gint num = 0;
-  AtkObject *item = NULL;
-
-  CAtkActorPrivate *priv = c_atk_actor_get_instance_private(C_ATK_ACTOR(obj));
-
-  obj_list = priv->accessibleObjects;
-
-  num = g_list_length (obj_list);
-
-  g_return_val_if_fail ((i < num)&&(i >= 0), NULL);
-
-  item = g_list_nth_data (obj_list, i);
-  if (!item)
-      return NULL;
-
-  g_object_ref (item);
-
-  return item;
+	GList *obj_list = NULL;
+	gint num = 0;
+	AtkObject *item = NULL;
+	CAtkActorPrivate *priv = c_atk_actor_get_instance_private(C_ATK_ACTOR(obj));
+	obj_list = priv->accessibleObjects;
+	num = g_list_length (obj_list);
+	g_return_val_if_fail ((i < num)&&(i >= 0), NULL);
+	item = g_list_nth_data (obj_list, i);
+	if (!item)
+		return NULL;
+	g_object_ref (item);
+	return item;
 }
 
 static void*
@@ -152,15 +145,13 @@ c_atk_actor_finalize (GObject *object)
 static void
 c_atk_actor_class_init (CAtkActorClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
-
-  atk_class->get_n_children = c_atk_actor_get_n_children;
-  atk_class->ref_child = c_atk_actor_ref_child;
-  atk_class->ref_state_set = c_atk_actor_ref_state_set;
-  atk_class->get_attributes = c_atk_actor_get_attributes;
-
-  object_class->finalize = c_atk_actor_finalize;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+	atk_class->get_n_children = c_atk_actor_get_n_children;
+	atk_class->ref_child = c_atk_actor_ref_child;
+	atk_class->ref_state_set = c_atk_actor_ref_state_set;
+	atk_class->get_attributes = c_atk_actor_get_attributes;
+	object_class->finalize = c_atk_actor_finalize;
 }
 
 static void
