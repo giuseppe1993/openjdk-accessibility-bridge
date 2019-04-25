@@ -76,8 +76,8 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env,
     }    
   
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-  /*mainloop = g_main_loop_new (NULL, FALSE);
-  g_main_loop_run (mainloop);*/
+  mainloop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (mainloop);
   
   /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
   (*env)->GetJavaVM(env, &bridge->jvm);*/
