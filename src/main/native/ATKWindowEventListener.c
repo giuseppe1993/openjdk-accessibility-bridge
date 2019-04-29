@@ -15,9 +15,11 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
 {
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
-    	frame = C_ATK_ACTOR(c_atk_frame_new ());
-    c_atk_actor_add_child(frame,ATK_OBJECT(root));
-    g_object_ref (frame);
+    {
+      frame = C_ATK_ACTOR(c_atk_frame_new ());
+      c_atk_actor_add_child(root,ATK_OBJECT(frame));
+      g_object_ref (frame);
+    }
     return frame;
 
 }

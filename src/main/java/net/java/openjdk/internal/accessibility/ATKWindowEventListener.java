@@ -48,10 +48,10 @@ public class ATKWindowEventListener implements WindowListener {
 
 	public ATKWindowEventListener(long root) {
         super();
-        //cObject= initAtkFrame(root);
+        cObject= initAtkFrame(root);
         System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
     }
-
+/*
     void printInformation(AccessibleContext ac){
         AccessibleStateSet states = ac.getAccessibleStateSet();
         int nchild = ac.getAccessibleChildrenCount();
@@ -103,13 +103,14 @@ public class ATKWindowEventListener implements WindowListener {
         }
     }
 
-
+*/
     @Override
     public void windowOpened(WindowEvent e) {
         Object frame = e.getSource();
         if (frame instanceof Accessible) {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
+            /*
             AccessibleStateSet states = ac.getAccessibleStateSet();
             int nchild = ac.getAccessibleChildrenCount();
             AccessibleRole accessibleRole = ac.getAccessibleRole();
@@ -157,14 +158,14 @@ public class ATKWindowEventListener implements WindowListener {
             for (int i =0; i<nchild;i++){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
                 printInformation(child);
-            }
+            }*/
 
             //TODO take all Accessibility content.
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
             //TODO push all in C Object
-            //atkFrameOpened(cObject, name, description);
+            atkFrameOpened(cObject, name, description);
         }
     }
 
@@ -175,7 +176,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameClosing(cObject, description);
+            atkFrameClosing(cObject, description);
             //System.err.println("closing: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -187,7 +188,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameClosed(cObject, description);
+            atkFrameClosed(cObject, description);
             //System.err.println("closed: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -199,7 +200,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameIconified(cObject, description);
+            atkFrameIconified(cObject, description);
             //System.err.println("iconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -211,7 +212,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameDeiconified(cObject, description);
+            atkFrameDeiconified(cObject, description);
             //System.err.println("Deiconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -223,7 +224,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameActivated(cObject, description);
+            atkFrameActivated(cObject, description);
             //System.err.println("activated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -235,7 +236,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            //atkFrameDeactivated(cObject, description);
+            atkFrameDeactivated(cObject, description);
             //System.err.println("deactivated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -244,7 +245,7 @@ public class ATKWindowEventListener implements WindowListener {
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
     	super.finalize();
-    	//freeAtkFrame(cObject);
+    	freeAtkFrame(cObject);
     }
 
 }

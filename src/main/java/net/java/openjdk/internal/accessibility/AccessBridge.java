@@ -40,13 +40,13 @@ public class AccessBridge {
 
     static {
         System.loadLibrary("OpenJDKAccessBridge");
-        //atkRoot = initATK();
-        /*mainloop = new Thread(new Runnable() {
+        atkRoot = initATK();
+        mainloop = new Thread(new Runnable() {
             public void run(){
                 runMainLoopATK();
             }
         });
-        mainloop.start();     */
+        mainloop.start();
         System.err.println("the refency of the AtkRoot: "+atkRoot);
     }
 
@@ -59,12 +59,12 @@ public class AccessBridge {
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
         super.finalize();
-        /*
+
         //I don't know if it is enought
         stopMainLoopATK();
         //maybe it's too much
         mainloop.stop();
         mainloop.destroy();
-        freeATK();  	*/
+        freeATK();  	
     }
 }
