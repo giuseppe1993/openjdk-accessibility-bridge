@@ -34,7 +34,6 @@ public class AccessBridge {
     private static native long initATK();
     private static native void runMainLoopATK();
     private static native void stopMainLoopATK();
-    private static native void freeATK();
     private static long atkRoot;
     private static Thread mainloop;
 
@@ -53,17 +52,5 @@ public class AccessBridge {
     public AccessBridge() {
         EventQueueMonitor.isGUIInitialized();
         SwingEventMonitor.addWindowListener(new ATKWindowEventListener(atkRoot));
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-      //when the Garbage collector destroy this object destroy also the C object
-      super.finalize();
-      //I don't know if it is enought
-      stopMainLoopATK();
-      //maybe it's too much
-      mainloop.stop();
-      mainloop.destroy();
-      freeATK();
     }
 }

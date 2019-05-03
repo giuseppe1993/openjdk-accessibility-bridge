@@ -62,6 +62,17 @@ setup_atk_util (void)
   g_type_class_unref (klass);
 }
 
+static gpointer jni_loop_callback(void *data)
+{
+  if (!g_main_loop_is_running((GMainLoop *)data))
+    g_main_loop_run((GMainLoop *)data);
+  else
+  {
+    printf("Running JNI already\n");
+  }
+  return 0;
+}
+
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, jclass AccessBridgeClass)
 {
@@ -75,12 +86,14 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, j
     }
 
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-  /*mainloop = g_main_loop_new (NULL, FALSE);
-  g_main_loop_run (mainloop);*/
+  GThread *thread;
+  char * message;
+  message = "JNI main loop";
 
-  /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
-  (*env)->GetJavaVM(env, &bridge->jvm);*/
-  //g_object_ref (root);
+  /*mainloop = g_main_loop_new (NULL, FALSE);
+  thread = g_thread_new(message, jni_loop_callback, (void *) mainloop);
+  mainloop = g_main_loop_ref(mainloop);*/
+
   return root;
 }
 
@@ -105,11 +118,4 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_stopMainLoopATK(JNIEnv
     g_main_loop_unref(mainloop);
     g_main_loop_quit (mainloop);
   }
-}
-
-JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_AccessBridge_freeATK(JNIEnv *env, jclass AccessBridgeClass)
-{
-  //g_object_unref(root);
-  atk_bridge_adaptor_cleanup();
 }
