@@ -41,7 +41,7 @@ get_root (void)
 {
   if (!root)
     root = ATK_OBJECT(c_atk_root_new ());
-  
+
   return root;
 }
 
@@ -71,16 +71,16 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, j
     if(!root)
     {
       fprintf(stderr, "Problems\n");
-      root = atk_get_root(); 
-    }    
-  
+      root = atk_get_root();
+    }
+
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
   /*mainloop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run (mainloop);*/
-  
+
   /*OpenJDKAccessBridge* bridge = (OpenJDKAccessBridge*) malloc(sizeof(OpenJDKAccessBridge));
   (*env)->GetJavaVM(env, &bridge->jvm);*/
-  g_object_ref (root);
+  //g_object_ref (root);
   return root;
 }
 
@@ -110,8 +110,6 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_stopMainLoopATK(JNIEnv
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_freeATK(JNIEnv *env, jclass AccessBridgeClass)
 {
-  g_object_unref(root);
+  //g_object_unref(root);
   atk_bridge_adaptor_cleanup();
 }
-
-

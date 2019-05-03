@@ -72,7 +72,7 @@ public class ATKWindowEventListener implements WindowListener {
         AccessibleComponent component = null;
         if( (component = ac.getAccessibleComponent() )!= null){
             Rectangle bound = component.getBounds();
-            System.err.println("Implement Java Compontent and have this dimension :"+bound.toString());
+            System.err.println("Implement Java Compontent and have this dimension : "+bound.toString());
         }
         if( ac.getAccessibleEditableText() != null ){
           System.err.println("Implement Java Editable Text interface");
@@ -84,7 +84,7 @@ public class ATKWindowEventListener implements WindowListener {
         }
         AccessibleRelationSet relationSet = null;
         if( (relationSet = ac.getAccessibleRelationSet() ) != null ){
-          System.err.println("Implement Java Relation Set interface and have this toString() method :["+relationSet.toString()+"]");
+          System.err.println("Have Java Relation Set and have this toString() method :["+relationSet.toString()+"]");
         }
         if( ac.getAccessibleTable() != null ){
           System.err.println("Implement Java Table interface");
@@ -102,7 +102,6 @@ public class ATKWindowEventListener implements WindowListener {
             }
         }
     }
-
 */
     @Override
     public void windowOpened(WindowEvent e) {
@@ -110,7 +109,7 @@ public class ATKWindowEventListener implements WindowListener {
         if (frame instanceof Accessible) {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
-            /*
+/*
             AccessibleStateSet states = ac.getAccessibleStateSet();
             int nchild = ac.getAccessibleChildrenCount();
             AccessibleRole accessibleRole = ac.getAccessibleRole();
@@ -143,7 +142,7 @@ public class ATKWindowEventListener implements WindowListener {
             }
             AccessibleRelationSet relationSet = null;
             if( (relationSet = ac.getAccessibleRelationSet() ) != null ){
-              System.err.println("Implement Java Relation Set interface and have this toString() method :["+relationSet.toString()+"]");
+              System.err.println("Have Java Relation Set and have this toString() method :["+relationSet.toString()+"]");
             }
             if( ac.getAccessibleTable() != null ){
               System.err.println("Implement Java Table interface");
@@ -158,8 +157,8 @@ public class ATKWindowEventListener implements WindowListener {
             for (int i =0; i<nchild;i++){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
                 printInformation(child);
-            }*/
-
+            }
+*/
             //TODO take all Accessibility content.
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();

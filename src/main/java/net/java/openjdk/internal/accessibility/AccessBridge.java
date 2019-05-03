@@ -57,14 +57,13 @@ public class AccessBridge {
 
     @Override
     protected void finalize() throws Throwable {
-    	//when the Garbage collector destroy this object destroy also the C object
-        super.finalize();
-
-        //I don't know if it is enought
-        stopMainLoopATK();
-        //maybe it's too much
-        mainloop.stop();
-        mainloop.destroy();
-        freeATK();  	
+      //when the Garbage collector destroy this object destroy also the C object
+      super.finalize();
+      //I don't know if it is enought
+      stopMainLoopATK();
+      //maybe it's too much
+      mainloop.stop();
+      mainloop.destroy();
+      freeATK();
     }
 }
