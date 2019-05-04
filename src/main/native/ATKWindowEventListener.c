@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <atk/atk.h>
-#include "AtkFrame.h"
+#include "MAtkFrame.h"
 
-static CAtkActor *frame = NULL;
+static MAtkObject *frame = NULL;
 static const char *utfdesciption;
 static const char *utfname;
 
@@ -16,8 +16,8 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     {
-      frame = C_ATK_ACTOR(c_atk_frame_new ());
-      c_atk_actor_add_child(root,ATK_OBJECT(frame));
+      frame = M_ATK_OBJECT(m_atk_frame_new ());
+      m_atk_object_add_child(root,ATK_OBJECT(frame));
       g_object_ref (frame);
     }
     return frame;

@@ -31,7 +31,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <atk-bridge.h>
-#include "AtkRoot.h"
+#include "MAtkRoot.h"
 
 static AtkObject *root = NULL;
 static GMainLoop *mainloop = NULL;
@@ -40,7 +40,7 @@ static AtkObject*
 get_root (void)
 {
   if (!root)
-    root = ATK_OBJECT(c_atk_root_new ());
+    root = ATK_OBJECT(m_atk_root_new ());
 
   return root;
 }
@@ -86,11 +86,11 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, j
     }
 
   fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-  GThread *thread;
+  /*GThread *thread;
   char * message;
   message = "JNI main loop";
 
-  /*mainloop = g_main_loop_new (NULL, FALSE);
+  mainloop = g_main_loop_new (NULL, FALSE);
   thread = g_thread_new(message, jni_loop_callback, (void *) mainloop);
   mainloop = g_main_loop_ref(mainloop);*/
 
