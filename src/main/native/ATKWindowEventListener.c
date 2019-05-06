@@ -6,25 +6,72 @@
 #include <atk/atk.h>
 #include "MAtkComponent.h"
 
+#define SWITCH(S) char *_S = S; if (0)
+#define CASE(S) } else if (strcmp(_S, S) == 0) {switch(1) { case 1
+#define BREAK }
+#define DEFAULT } else {switch(1) { case 1
+
+
 static MAtkObject *frame = NULL;
 static const char *utfdesciption;
 static const char *utfname;
 
-/*JNIEXPORT jint JNICALL Java_Loader_Convert(JNIEnv *env, jclass ATKWindowEventListenerclass, jobject EnvelopeType) {
-    jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "package/of/envelopeType"), "ordinal", "()I");
-    jint value = (*env)->CallIntMethod(env, EnvelopeType, envelopeGetValueMethod);
-    switch (value) {
-        case -1:
-        // not specified
-        break;
-        case 0:
-        // none
-        break;
-        ...
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jobject AccessibleRole) {
+    jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "javax/accessibility/AccessibleRole"), "toString", "()Ljava/lang/String;");
+    jobject string = (*env)->CallObjectMethod(env, AccessibleRole, envelopeGetValueMethod);
+    char *utfvalue = (*env)->GetStringUTFChars(env, string, NULL);
+    fprintf(stderr, "%s\n", utfvalue);
+    SWITCH (utfvalue) {
+        CASE ("frame"):
+            atk_object_set_role(object, ATK_ROLE_FRAME);
+            BREAK;
+        CASE ("root pane"):
+            atk_object_set_role(object, ATK_ROLE_ROOT_PANE);
+            BREAK;
+        CASE ("layered pane"):
+            atk_object_set_role(object, ATK_ROLE_LAYERED_PANE);
+            BREAK;
+        CASE ("panel"):
+            atk_object_set_role(object, ATK_ROLE_PANEL);
+            BREAK;
+        CASE ("menu bar"):
+            atk_object_set_role(object, ATK_ROLE_MENU_BAR);
+            BREAK;
+        CASE ("menu"):
+            atk_object_set_role(object, ATK_ROLE_MENU);
+            BREAK;
+        CASE ("menu item"):
+            atk_object_set_role(object, ATK_ROLE_MENU_ITEM);
+            BREAK;
+        CASE ("check box"):
+            atk_object_set_role(object, ATK_ROLE_CHECK_BOX);
+            BREAK;
+        CASE ("separator"):
+            atk_object_set_role(object, ATK_ROLE_SEPARATOR);
+            BREAK;
+        CASE ("page tab list"):
+            atk_object_set_role(object, ATK_ROLE_PAGE_TAB_LIST);
+            BREAK;
+        CASE ("page tab"):
+            atk_object_set_role(object, ATK_ROLE_PAGE_TAB);
+            BREAK;
+            /*
+        CASE ("ghijkl"):
+            printf ("C1!\n");
+            BREAK;*/
+        DEFAULT:
+            printf ("problem!\n");
+            BREAK;
     }
-    // rest of native method
 }
-*/
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jint x, jint y, jint width, jint height)
+{
+  m_atk_component_set_bound (object, x, y, width, height);
+}
+
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
 {
@@ -33,7 +80,6 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
     {
       //frame = M_ATK_OBJECT(m_atk_frame_new ());
       frame = M_ATK_OBJECT( m_atk_component_new() );
-      atk_object_set_role(ATK_OBJECT(frame), ATK_ROLE_FRAME);
       m_atk_object_add_child(root,ATK_OBJECT(frame));
       g_object_ref (frame);
     }
@@ -82,7 +128,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 		else
 			fprintf(stderr, "NULL\n");
 
-    m_atk_component_set_bound (M_ATK_COMPONENT(frame), 10, 10, 10, 10);
+    //m_atk_component_set_bound (M_ATK_COMPONENT(frame), 10, 10, 10, 10);
 	}
 }
 

@@ -44,6 +44,10 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void atkFrameActivated(long cObject, String description);
     private static native void atkFrameDeactivated(long cObject, String description);
 
+    //setting of C object
+    private static native void setRole(long object, AccessibleRole role);
+    private static native void setBound(long object, int x, int y, int width, int height);
+
     private long cObject;
 
 	public ATKWindowEventListener(long root) {
@@ -112,7 +116,6 @@ public class ATKWindowEventListener implements WindowListener {
 /*
             AccessibleStateSet states = ac.getAccessibleStateSet();
             int nchild = ac.getAccessibleChildrenCount();
-            AccessibleRole accessibleRole = ac.getAccessibleRole();
             System.err.println("\nJava Root name is :'"+ac.getAccessibleName()+"' have this description:'"+
             ac.getAccessibleDescription()+"'\nhave this role: "+
             accessibleRole.toString()+"\nhave this states: ["+
@@ -163,9 +166,19 @@ public class ATKWindowEventListener implements WindowListener {
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
-
+            AccessibleRole accessibleRole = ac.getAccessibleRole();
             //TODO push all in C Object
             atkFrameOpened(cObject, name, description);
+            setRole(cObject,accessibleRole);
+            AccessibleComponent component = null;
+            if( (component = ac.getAccessibleComponent() )!= null){
+                Rectangle bound = component.getBounds();
+                int height = (int) bound.getHeight();
+                int width = (int) bound.getWidth();
+                int x = (int) bound.getX();
+                int y = (int) bound.getY();
+                setBound(cObject, x, y, width, height);
+            }
         }
     }
 
