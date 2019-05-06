@@ -7,8 +7,8 @@
 #include "MAtkFrame.h"
 
 static MAtkObject *frame = NULL;
-static const char *utfdesciption;
-static const char *utfname;
+static char *utfdesciption;
+static char *utfname;
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
@@ -38,19 +38,21 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 		fprintf(stderr, "ATKWindowEventListener_FrameOpened name is:");
 		if (name != NULL){
 			utfname = (*env)->GetStringUTFChars(env, name, NULL);
-			atk_object_set_name(ATK_OBJECT(frame),utfname);
-			fprintf(stderr, "%s ", utfdesciption);
+      m_atk_object_set_name(frame, utfname);
+			fprintf(stderr, "%s ", utfname);
 		}
 		else
 			fprintf(stderr, "NULL ");
 		fprintf(stderr, "description is: ");
 		if (description != NULL){
 			utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
-			atk_object_set_description(ATK_OBJECT(frame),utfdesciption);
+      m_atk_object_set_description(frame, utfdesciption);
 			fprintf(stderr, "%s\n", utfdesciption);
 		}
 		else
 			fprintf(stderr, "NULL\n");
+
+    m_atk_component_set_bound (frame, 10, 10, 10, 10);
 	}
 }
 

@@ -55,6 +55,16 @@ m_atk_component_set_layer (MAtkComponent *self, AtkLayer layer)
 }
 
 void
+m_atk_component_set_bound (MAtkComponent *self, gint x, gint y, gint width, gint height)
+{
+  MAtkComponentPrivate *priv = m_atk_component_get_instance_private(self);
+  priv->rectangle->x = x;
+  priv->rectangle->y = y;
+  priv->rectangle->width = width;
+  priv->rectangle->height = height;
+}
+
+void
 m_atk_component_set_coord_type(MAtkComponent *self, AtkCoordType coord_type)
 {
     g_return_if_fail (M_IS_ATK_COMPONENT (self));

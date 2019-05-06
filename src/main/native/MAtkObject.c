@@ -13,8 +13,8 @@
 typedef struct
 {
 	GList *accessibleObjects;
-	gchar *name;
-	gchar *description;
+	char *name;
+	char *description;
 	AtkStateSet *states;
 	AtkRelationSet *relations;
 	AtkAttributeSet *attributes;
@@ -107,7 +107,7 @@ m_atk_object_ref_child (AtkObject *obj, gint i)
   return item;
 }
 
-void m_atk_object_set_name(MAtkObject *object, gchar *name)
+void m_atk_object_set_name(MAtkObject *object, char *name)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
 	priv->name = name;
@@ -121,7 +121,7 @@ m_atk_object_get_name(AtkObject *obj)
 	return strdup(priv->name);
 }
 
-void m_atk_object_set_description(MAtkObject *object, gchar *description)
+void m_atk_object_set_description(MAtkObject *object, char *description)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
 	priv->description = description;
@@ -245,6 +245,8 @@ m_atk_object_init (MAtkObject *self)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(self);
 	priv->accessibleObjects = NULL;
+	priv->name = NULL;
+	priv->description = NULL;
 	priv->states = atk_state_set_new();
 	priv->relations = atk_relation_set_new();
 	priv->attributes = NULL;

@@ -48,7 +48,7 @@ public class ATKWindowEventListener implements WindowListener {
 
 	public ATKWindowEventListener(long root) {
         super();
-        cObject= initAtkFrame(root);
+        cObject = initAtkFrame(root);
         System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
     }
 /*
@@ -163,6 +163,7 @@ public class ATKWindowEventListener implements WindowListener {
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
+            
             //TODO push all in C Object
             atkFrameOpened(cObject, name, description);
         }
