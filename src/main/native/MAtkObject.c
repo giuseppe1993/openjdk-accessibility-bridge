@@ -13,8 +13,8 @@
 typedef struct
 {
 	GList *accessibleObjects;
-	char *name;
-	char *description;
+	const char *name;
+	const char *description;
 	AtkStateSet *states;
 	AtkRelationSet *relations;
 	AtkAttributeSet *attributes;
@@ -84,33 +84,41 @@ m_atk_object_get_n_children (AtkObject *obj)
 }
 
 static AtkObject*
-m_atk_object_ref_child (AtkObject *obj, gint i)
+m_atk_object_ref_child (AtkObject *obj, guint i)
 {
   GList *obj_list = NULL;
-  gint num = 0;
+  guint num = 0;
   AtkObject *item = NULL;
 
   MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
-
   obj_list = priv->accessibleObjects;
-
   num = g_list_length (obj_list);
-
-  g_return_val_if_fail ((i < num)&&(i >= 0), NULL);
+	//fprintf(stderr, "num:%u i:%u\n", &num, &i);
+  g_return_val_if_fail ( (i < num) && (i >= 0) , NULL);
 
   item = g_list_nth_data (obj_list, i);
   if (!item)
       return NULL;
 
   g_object_ref (item);
-
   return item;
 }
 
-void m_atk_object_set_name(MAtkObject *object, char *name)
+void m_atk_object_set_name(MAtkObject *object, const char *name)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
+	AtkPropertyValues *signalstuff = g_new0(AtkPropertyValues, 1);
+	GValue *old_value = g_new0 (GValue, 1);
+	GValue *new_value = g_new0 (GValue, 1);
+	g_value_init (old_value, G_TYPE_STRING);
+	g_value_init (new_value, G_TYPE_STRING);
+	g_value_set_string (old_value, priv->name);
+	g_value_set_string (new_value, name);
+	signalstuff->property_name = "accessible-name";
+	signalstuff->old_value = *old_value;
+	signalstuff->new_value = *new_value;
 	priv->name = name;
+	g_signal_emit_by_name (object, "property-change", signalstuff, NULL);
 }
 
 static const char*
@@ -121,10 +129,21 @@ m_atk_object_get_name(AtkObject *obj)
 	return strdup(priv->name);
 }
 
-void m_atk_object_set_description(MAtkObject *object, char *description)
+void m_atk_object_set_description(MAtkObject *object, const char *description)
 {
-	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
+	MAtkObjectPrivate *priv = m_atk_object_get_instance_private (object);
+	AtkPropertyValues *signalstuff = g_new0 (AtkPropertyValues, 1);
+	GValue *old_value = g_new0 (GValue, 1);
+	GValue *new_value = g_new0 (GValue, 1);
+	g_value_init (old_value, G_TYPE_STRING);
+	g_value_init (new_value, G_TYPE_STRING);
+	g_value_set_string (old_value, priv->description);
+	g_value_set_string (new_value, description);
+	signalstuff->property_name = "accessible-description";
+	signalstuff->old_value = *old_value;
+	signalstuff->new_value = *new_value;
 	priv->description = description;
+	g_signal_emit_by_name (object, "property-change", signalstuff, NULL);
 }
 
 static const char*
@@ -245,8 +264,6 @@ m_atk_object_init (MAtkObject *self)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(self);
 	priv->accessibleObjects = NULL;
-	priv->name = NULL;
-	priv->description = NULL;
 	priv->states = atk_state_set_new();
 	priv->relations = atk_relation_set_new();
 	priv->attributes = NULL;

@@ -24,8 +24,8 @@ struct _MAtkObjectClass
 
 void m_atk_object_add_child (MAtkObject *object, AtkObject *obj);
 void m_atk_object_remove_child (MAtkObject *object, AtkObject *obj);
-void m_atk_object_set_name(MAtkObject *object, char *name);
-void m_atk_object_set_description(MAtkObject *object, char *description);
+void m_atk_object_set_name(MAtkObject *object, const char *name);
+void m_atk_object_set_description(MAtkObject *object, const char *description);
 void m_atk_object_add_state (MAtkObject *object, AtkStateType state);
 void m_atk_object_remove_state (MAtkObject *object, AtkStateType state);
 void m_atk_object_add_attribute (MAtkObject *object, gchar *name, gchar *value);

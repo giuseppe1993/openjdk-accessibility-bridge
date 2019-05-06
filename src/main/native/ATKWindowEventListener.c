@@ -7,8 +7,8 @@
 #include "MAtkFrame.h"
 
 static MAtkObject *frame = NULL;
-static char *utfdesciption;
-static char *utfname;
+static const char *utfdesciption;
+static const char *utfname;
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
@@ -39,6 +39,12 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 		if (name != NULL){
 			utfname = (*env)->GetStringUTFChars(env, name, NULL);
       m_atk_object_set_name(frame, utfname);
+      /*AtkPropertyValues signalstuff = g_new0(AtkPropertyValues, 1);
+      signalstuff->property_name = "accessible-name";
+      signalstuff->old_value = atk_object_get_name(ATK_OBJECT(frame));
+      signalstuff->new_value = utfname;
+      atk_object_set_name(ATK_OBJECT(frame),utfname);
+      g_signal_emit_by_name (object, signalstuff, NULL);*/
 			fprintf(stderr, "%s ", utfname);
 		}
 		else
@@ -46,13 +52,20 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 		fprintf(stderr, "description is: ");
 		if (description != NULL){
 			utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
+
       m_atk_object_set_description(frame, utfdesciption);
+      /*AtkPropertyValues signalstuff = g_new0(AtkPropertyValues, 1);
+      signalstuff->property_name = "accessible-name";
+      signalstuff->old_value = atk_object_get_description(ATK_OBJECT(frame));
+      signalstuff->new_value = utfname;
+      atk_object_set_description(ATK_OBJECT(frame),utfname);*/
+      //atk_object_set_description(ATK_OBJECT(frame),utfdesciption);
 			fprintf(stderr, "%s\n", utfdesciption);
 		}
 		else
 			fprintf(stderr, "NULL\n");
 
-    m_atk_component_set_bound (frame, 10, 10, 10, 10);
+    m_atk_component_set_bound (M_ATK_COMPONENT(frame), 10, 10, 10, 10);
 	}
 }
 

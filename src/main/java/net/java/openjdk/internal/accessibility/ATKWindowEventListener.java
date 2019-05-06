@@ -163,7 +163,7 @@ public class ATKWindowEventListener implements WindowListener {
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
-            
+
             //TODO push all in C Object
             atkFrameOpened(cObject, name, description);
         }
@@ -247,5 +247,4 @@ public class ATKWindowEventListener implements WindowListener {
     	super.finalize();
     	freeAtkFrame(cObject);
     }
-
 }
