@@ -4,19 +4,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <atk/atk.h>
-#include "MAtkFrame.h"
+#include "MAtkComponent.h"
 
 static MAtkObject *frame = NULL;
 static const char *utfdesciption;
 static const char *utfname;
 
+/*JNIEXPORT jint JNICALL Java_Loader_Convert(JNIEnv *env, jclass ATKWindowEventListenerclass, jobject EnvelopeType) {
+    jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "package/of/envelopeType"), "ordinal", "()I");
+    jint value = (*env)->CallIntMethod(env, EnvelopeType, envelopeGetValueMethod);
+    switch (value) {
+        case -1:
+        // not specified
+        break;
+        case 0:
+        // none
+        break;
+        ...
+    }
+    // rest of native method
+}
+*/
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
 {
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     {
-      frame = M_ATK_OBJECT(m_atk_frame_new ());
+      //frame = M_ATK_OBJECT(m_atk_frame_new ());
+      frame = M_ATK_OBJECT( m_atk_component_new() );
+      atk_object_set_role(ATK_OBJECT(frame), ATK_ROLE_FRAME);
       m_atk_object_add_child(root,ATK_OBJECT(frame));
       g_object_ref (frame);
     }

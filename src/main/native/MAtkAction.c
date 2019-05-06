@@ -23,7 +23,7 @@ struct _RealAction {
 
  static void m_atk_action_atk_action_init (AtkActionIface *iface);
 
- G_DEFINE_ABSTRACT_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })
+ G_DEFINE_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })
 
 static gint
 m_atk_action_get_n_actions(AtkAction *action)
@@ -145,9 +145,21 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
    realaction->localizedname = localizedname;
  }
 
+ MAtkAction *
+ m_atk_action_new (void)
+ {
+    MAtkAction *action = g_object_new (M_TYPE_ATK_ACTION, NULL);
+    atk_object_initialize (ATK_OBJECT(action), NULL);
+    return action;
+ }
+
  static void
  m_atk_action_init (MAtkAction *self)
  {
-     MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-     priv->accessibleActions = NULL;
+   atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_INVALID);
+   atk_object_set_parent(ATK_OBJECT(self), NULL);
+   m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Action");
+   m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the Action component of mediator");
+   MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+   priv->accessibleActions = NULL;
  }
