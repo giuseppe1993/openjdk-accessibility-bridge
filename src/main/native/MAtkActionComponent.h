@@ -22,6 +22,7 @@
  };
 
  //protected
+ MAtkActionComponent *m_atk_action_component_new (void);
  void m_atk_action_component_set_layer (MAtkActionComponent *self, AtkLayer layer);
  void m_atk_action_component_set_coord_type (MAtkActionComponent *self, AtkCoordType coord_type);
 

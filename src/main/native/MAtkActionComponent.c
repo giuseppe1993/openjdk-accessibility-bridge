@@ -18,7 +18,7 @@
 
  static void m_atk_action_component_atk_action_component_init (AtkComponentIface *iface);
 
- G_DEFINE_ABSTRACT_TYPE_WITH_CODE (MAtkActionComponent, m_atk_action_component, M_TYPE_ATK_ACTION, { G_ADD_PRIVATE (MAtkActionComponent); G_IMPLEMENT_INTERFACE (atk_component_get_type(), m_atk_action_component_atk_action_component_init); })
+ G_DEFINE_TYPE_WITH_CODE (MAtkActionComponent, m_atk_action_component, M_TYPE_ATK_ACTION, { G_ADD_PRIVATE (MAtkActionComponent); G_IMPLEMENT_INTERFACE (atk_component_get_type(), m_atk_action_component_atk_action_component_init); })
 
  static void
  m_atk_action_component_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
@@ -78,10 +78,22 @@
    object_class->finalize = m_atk_action_component_finalize;
  }
 
+ MAtkActionComponent *
+ m_atk_action_component_new (void)
+ {
+    MAtkActionComponent *actioncomponent = g_object_new (M_TYPE_ATK_ACTION_COMPONENT, NULL);
+    atk_object_initialize (ATK_OBJECT(actioncomponent), NULL);
+    return actioncomponent;
+ }
+
  static void
  m_atk_action_component_init (MAtkActionComponent *self)
  {
-     MAtkActionComponentPrivate *priv = m_atk_action_component_get_instance_private(self);
-     priv->rectangle = g_new0 ( AtkRectangle, 1 );
-     priv->layer = ATK_LAYER_INVALID;
+   atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_INVALID);
+   atk_object_set_parent(ATK_OBJECT(self), NULL);
+   m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Action Component");
+   m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the root component of mediator");
+   MAtkActionComponentPrivate *priv = m_atk_action_component_get_instance_private(self);
+   priv->rectangle = g_new0 ( AtkRectangle, 1 );
+   priv->layer = ATK_LAYER_INVALID;
  }

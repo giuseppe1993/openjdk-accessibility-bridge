@@ -20,7 +20,7 @@ typedef struct
 	AtkAttributeSet *attributes;
 } MAtkObjectPrivate;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (MAtkObject, m_atk_object, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (MAtkObject, m_atk_object, ATK_TYPE_OBJECT)
 
 void
 m_atk_object_add_child(MAtkObject *object, AtkObject *obj)
@@ -84,10 +84,10 @@ m_atk_object_get_n_children (AtkObject *obj)
 }
 
 static AtkObject*
-m_atk_object_ref_child (AtkObject *obj, guint i)
+m_atk_object_ref_child (AtkObject *obj, gint i)
 {
   GList *obj_list = NULL;
-  guint num = 0;
+  gint num = 0;
   AtkObject *item = NULL;
 
   MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
@@ -259,9 +259,21 @@ m_atk_object_class_init (MAtkObjectClass *klass)
   object_class->finalize = m_atk_object_finalize;
 }
 
+MAtkObject *
+m_atk_object_new (void)
+{
+   MAtkObject *object = g_object_new (M_TYPE_ATK_OBJECT, NULL);
+   atk_object_initialize (ATK_OBJECT(object), NULL);
+   return object;
+}
+
 static void
 m_atk_object_init (MAtkObject *self)
 {
+	atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_INVALID);
+	atk_object_set_parent(ATK_OBJECT(self), NULL);
+  m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Object");
+  m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the object component of mediator");
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(self);
 	priv->accessibleObjects = NULL;
 	priv->states = atk_state_set_new();
