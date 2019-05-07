@@ -17,8 +17,9 @@ static const char *utfdesciption;
 static const char *utfname;
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jstring accessibleRole)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring accessibleRole)
 {
+    AtkObject *object = ATK_OBJECT((gpointer) refency);
     /*jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "javax/accessibility/AccessibleRole"), "toString", "()Ljava/lang/String;");
     jobject string = (*env)->CallObjectMethod(env, AccessibleRole, envelopeGetValueMethod);*/
     char *utfvalue = (*env)->GetStringUTFChars(env, accessibleRole, NULL);
@@ -68,14 +69,16 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNI
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jint x, jint y, jint width, jint height)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint x, jint y, jint width, jint height)
 {
+  MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);
   m_atk_component_set_bound (object, x, y, width, height);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jstring states)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring states)
 {
+  MAtkObject *object = M_ATK_OBJECT((gpointer) refency);
   char *utfstates = (*env)->GetStringUTFChars(env, states, NULL);
   const char *delim = ",";
   fprintf(stderr, "%s\n", utfstates);
@@ -119,17 +122,19 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (J
 }
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong father)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency)
 {
+  MAtkObject *father = M_ATK_OBJECT((gpointer) refency);
   AtkObject *child= ATK_OBJECT( m_atk_component_new() );
   m_atk_object_add_child (father, child);
   g_object_ref (child);
-  return child;
+  return (jlong) child;
 }
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency)
 {
+    MAtkObject *root = M_ATK_OBJECT((gpointer) refency);
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     {
@@ -137,7 +142,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame
       m_atk_object_add_child (root, ATK_OBJECT(frame));
       g_object_ref (frame);
     }
-    return frame;
+    return (jlong) frame;
 
 }
 
@@ -149,9 +154,10 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring name, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring name, jstring description)
 {
-	if (frame == cObject){
+  MAtkObject *object = M_ATK_OBJECT ((gpointer) refency);
+	if (frame == object){
 		fprintf(stderr, "ATKWindowEventListener_FrameOpened name is:");
 		if (name != NULL){
 			utfname = (*env)->GetStringUTFChars(env, name, NULL);

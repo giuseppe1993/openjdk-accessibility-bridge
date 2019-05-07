@@ -98,7 +98,7 @@ Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, j
   thread = g_thread_new(message, jni_loop_callback, (void *) mainloop);
   mainloop = g_main_loop_ref(mainloop);*/
 
-  return root;
+  return (jlong) root;
 }
 
 JNIEXPORT void JNICALL
