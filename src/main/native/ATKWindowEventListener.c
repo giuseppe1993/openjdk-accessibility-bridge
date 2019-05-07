@@ -32,16 +32,13 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (J
   MAtkObject *object = M_ATK_OBJECT((gpointer) refency);
   char *utfstates = (*env)->GetStringUTFChars(env, states, NULL);
   const char *delim = ",";
-  fprintf(stderr, "%s\n", utfstates);
   char *ptr = strtok(utfstates, delim);
-  fprintf(stderr, "%s\n", ptr);
   AtkState state = ATK_STATE_INVALID;
 	while(ptr != NULL)
 	{
     state = mapping_state_from_Java (ptr);
     m_atk_object_add_state (object, state);
 		ptr = strtok(NULL, delim);
-    fprintf(stderr, "%s\n", ptr);
 	}
 
 }
