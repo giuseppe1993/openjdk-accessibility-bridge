@@ -45,7 +45,9 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void atkFrameDeactivated(long cObject, String description);
 
     //setting of C object
-    private static native void setRole(long object, AccessibleRole role);
+    private static native long newAtkComponent(long father);
+    private static native void setRole(long object, String role);
+    private static native void setStates(long object, String states);
     private static native void setBound(long object, int x, int y, int width, int height);
 
     private long cObject;
@@ -55,8 +57,8 @@ public class ATKWindowEventListener implements WindowListener {
         cObject = initAtkFrame(root);
         System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
     }
-/*
-    void printInformation(AccessibleContext ac){
+
+    void createChildren(AccessibleContext ac){
         AccessibleStateSet states = ac.getAccessibleStateSet();
         int nchild = ac.getAccessibleChildrenCount();
         AccessibleRole accessibleRole = ac.getAccessibleRole();
@@ -102,11 +104,11 @@ public class ATKWindowEventListener implements WindowListener {
         if ( nchild > 0 ){
             for ( int i =0; i < nchild ;i++ ){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
-                printInformation(child);
+                createChildren(child);
             }
         }
     }
-*/
+
     @Override
     public void windowOpened(WindowEvent e) {
         Object frame = e.getSource();
@@ -162,11 +164,9 @@ public class ATKWindowEventListener implements WindowListener {
                 printInformation(child);
             }
 */
-            //TODO take all Accessibility content.
-            // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
-            AccessibleRole accessibleRole = ac.getAccessibleRole();
+            String accessibleRole = ac.getAccessibleRole().toString();
             //TODO push all in C Object
             atkFrameOpened(cObject, name, description);
             setRole(cObject,accessibleRole);
@@ -179,6 +179,11 @@ public class ATKWindowEventListener implements WindowListener {
                 int y = (int) bound.getY();
                 setBound(cObject, x, y, width, height);
             }
+            String states = ac.getAccessibleStateSet().toString();
+            states = states.replace("[","");
+            states = states.replace("]","");
+            setStates(cObject, states);
+
         }
     }
 

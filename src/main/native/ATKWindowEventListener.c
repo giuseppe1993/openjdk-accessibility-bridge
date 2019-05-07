@@ -17,11 +17,12 @@ static const char *utfdesciption;
 static const char *utfname;
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jobject AccessibleRole) {
-    jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "javax/accessibility/AccessibleRole"), "toString", "()Ljava/lang/String;");
-    jobject string = (*env)->CallObjectMethod(env, AccessibleRole, envelopeGetValueMethod);
-    char *utfvalue = (*env)->GetStringUTFChars(env, string, NULL);
-    fprintf(stderr, "%s\n", utfvalue);
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jstring accessibleRole)
+{
+    /*jmethodID envelopeGetValueMethod = (*env)->GetMethodID(env, (*env)->FindClass(env, "javax/accessibility/AccessibleRole"), "toString", "()Ljava/lang/String;");
+    jobject string = (*env)->CallObjectMethod(env, AccessibleRole, envelopeGetValueMethod);*/
+    char *utfvalue = (*env)->GetStringUTFChars(env, accessibleRole, NULL);
+    //fprintf(stderr, "%s\n", utfvalue);
     SWITCH (utfvalue) {
         CASE ("frame"):
             atk_object_set_role(object, ATK_ROLE_FRAME);
@@ -72,15 +73,68 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JN
   m_atk_component_set_bound (object, x, y, width, height);
 }
 
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong object, jstring states)
+{
+  char *utfstates = (*env)->GetStringUTFChars(env, states, NULL);
+  const char *delim = ",";
+  fprintf(stderr, "%s\n", utfstates);
+  char *ptr = strtok(utfstates, delim);
+  fprintf(stderr, "%s\n", ptr);
+	while(ptr != NULL)
+	{
+		SWITCH (utfstates){
+      CASE ("enabled"):
+          m_atk_object_add_state (object, ATK_STATE_ENABLED);
+          BREAK;
+      CASE ("focusable"):
+          m_atk_object_add_state (object, ATK_STATE_FOCUSABLE);
+          BREAK;
+      CASE ("visible"):
+          m_atk_object_add_state (object, ATK_STATE_VISIBLE);
+          BREAK;
+      CASE ("showing"):
+          m_atk_object_add_state (object, ATK_STATE_SHOWING);
+          BREAK;
+      CASE ("resizable"):
+          m_atk_object_add_state (object, ATK_STATE_RESIZABLE);
+          BREAK;
+      CASE ("opaque"):
+          m_atk_object_add_state (object, ATK_STATE_OPAQUE);
+          BREAK;
+      CASE ("selectable"):
+          m_atk_object_add_state (object, ATK_STATE_SELECTABLE);
+          BREAK;
+      CASE ("checked"):
+          m_atk_object_add_state (object, ATK_STATE_CHECKED);
+          BREAK;
+      DEFAULT:
+          printf ("problem!\n");
+          BREAK;
+    }
+		ptr = strtok(NULL, delim);
+    fprintf(stderr, "%s\n", ptr);
+	}
+
+}
+
+JNIEXPORT jlong JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong father)
+{
+  AtkObject *child= ATK_OBJECT( m_atk_component_new() );
+  m_atk_object_add_child (father, child);
+  g_object_ref (child);
+  return child;
+}
+
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
 {
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     {
-      //frame = M_ATK_OBJECT(m_atk_frame_new ());
-      frame = M_ATK_OBJECT( m_atk_component_new() );
-      m_atk_object_add_child(root,ATK_OBJECT(frame));
+      frame = M_ATK_OBJECT (m_atk_component_new());
+      m_atk_object_add_child (root, ATK_OBJECT(frame));
       g_object_ref (frame);
     }
     return frame;
