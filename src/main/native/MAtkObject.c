@@ -84,10 +84,10 @@ m_atk_object_get_n_children (AtkObject *obj)
 }
 
 static AtkObject*
-m_atk_object_ref_child (AtkObject *obj, gint i)
+m_atk_object_ref_child (AtkObject *obj, guint i)
 {
   GList *obj_list = NULL;
-  gint num = 0;
+  guint num = 0;
   AtkObject *item = NULL;
 
   MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
