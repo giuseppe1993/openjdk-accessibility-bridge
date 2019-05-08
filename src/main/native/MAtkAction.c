@@ -104,19 +104,19 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
    object_class->finalize = m_atk_action_finalize;
  }
 
- void m_atk_action_add_action(MAtkAction *self, RealAction *action)
+ void m_atk_action_add_action (MAtkAction *self, RealAction *action)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
    priv->accessibleActions = g_list_append (priv->accessibleActions, action);
  }
 
- void m_atk_action_remove_action(MAtkAction *self, RealAction *action)
+ void m_atk_action_remove_action (MAtkAction *self, RealAction *action)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
    priv->accessibleActions = g_list_remove (priv->accessibleActions, action);
  }
 
- void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name)
+ void m_atk_action_set_name (MAtkAction *self, RealAction *action, gchar *name)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
    GList *data = g_list_find(priv->accessibleActions, action);
@@ -125,7 +125,18 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
    g_free((void*)realaction->name);
    realaction->name = name;
  }
- void m_atk_action_set_keybinding(MAtkAction *self, RealAction *action, gchar *keybinding)
+
+ void m_atk_action_set_description (MAtkAction *self, RealAction *action, gchar *description)
+ {
+     MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+     GList *data = g_list_find(priv->accessibleActions, action);
+     RealAction *realaction = (RealAction*) data->data;
+     g_return_if_fail (realaction);
+     g_free((void*)realaction->description);
+     realaction->description = description;
+ }
+
+ void m_atk_action_set_keybinding (MAtkAction *self, RealAction *action, gchar *keybinding)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
    GList *data = g_list_find(priv->accessibleActions, action);

@@ -54,6 +54,16 @@
  }
 
  void
+ m_atk_action_component_set_bound (MAtkActionComponent *self, gint x, gint y, gint width, gint height)
+ {
+   MAtkActionComponentPrivate *priv = m_atk_action_component_get_instance_private(self);
+   priv->rectangle->x = x;
+   priv->rectangle->y = y;
+   priv->rectangle->width = width;
+   priv->rectangle->height = height;
+ }
+
+ void
  m_atk_action_component_set_coord_type(MAtkActionComponent *self, AtkCoordType coord_type)
  {
      g_return_if_fail (M_IS_ATK_ACTION_COMPONENT (self));
