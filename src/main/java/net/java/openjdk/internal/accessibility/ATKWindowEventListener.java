@@ -118,6 +118,14 @@ public class ATKWindowEventListener implements WindowListener {
             setBound(childReferency, x, y, width, height);
         }
         child = father.addChild(new Long(childReferency));
+        hashReferency.put(ac,child);
+        if (name  == null)
+            name = "";
+        setName (childReferency, name);
+        if (description == null)
+            description = "";
+        setDescription (childReferency, description);
+        setRole(childReferency, accessibleRole);
         /*
         if( ac.getAccessibleEditableText() != null ){
           System.err.println("Implement Java Editable Text interface");

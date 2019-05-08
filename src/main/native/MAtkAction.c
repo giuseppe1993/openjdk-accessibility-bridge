@@ -14,13 +14,6 @@
      GList *accessibleActions;
  } MAtkActionPrivate;
 
-struct _RealAction {
-   gchar* description;
-   gchar* name;
-   gchar* keybinding;
-   gchar* localizedname;
- };
-
  static void m_atk_action_atk_action_init (AtkActionIface *iface);
 
  G_DEFINE_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })

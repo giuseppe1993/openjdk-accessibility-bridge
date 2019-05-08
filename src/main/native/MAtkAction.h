@@ -23,6 +23,13 @@
 
  typedef struct _RealAction RealAction;
 
+ struct _RealAction {
+    gchar* description;
+    gchar* name;
+    gchar* keybinding;
+    gchar* localizedname;
+  };
+
  MAtkAction *m_atk_action_new (void);
  void m_atk_action_add_action(MAtkAction *self, RealAction *action);
  void m_atk_action_remove_action(MAtkAction *self, RealAction *action);

@@ -44,7 +44,7 @@ get_root (void)
   if (!root)
   {
     root = ATK_OBJECT(m_atk_object_new ());
-    atk_object_set_role(root, ATK_ROLE_APPLICATION);
+    m_atk_object_set_role(M_ATK_OBJECT(root), ATK_ROLE_APPLICATION);
     m_atk_object_set_name(M_ATK_OBJECT(root),"M Atk Root");
     m_atk_object_set_description(M_ATK_OBJECT(root),"this is the description of the root component of mediator");
   }

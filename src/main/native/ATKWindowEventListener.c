@@ -13,10 +13,10 @@ static MAtkObject *frame = NULL;
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring accessibleRole)
 {
-    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    MAtkObject *object = M_ATK_OBJECT((gpointer) refency);
     char *utfvalue = strdup( (*env)->GetStringUTFChars(env, accessibleRole, NULL));
     AtkRole role = mapping_role_from_Java(utfvalue);
-    atk_object_set_role (object, role);
+    m_atk_object_set_role (object, role);
 }
 
 JNIEXPORT void JNICALL
@@ -67,9 +67,9 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (J
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setName (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring name)
 {
-    static const char *utfname;
+    char *utfname;
     if (name != NULL){
-        utfname = (*env)->GetStringUTFChars(env, name, NULL);
+        utfname = strdup( (*env)->GetStringUTFChars(env, name, NULL) );
         m_atk_object_set_name(frame, utfname);
     }
     else
@@ -79,9 +79,9 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setName (JNI
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setDescription (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring description)
 {
-    static const char *utfdesciption;
+    char *utfdesciption;
     if (description != NULL){
-        utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
+        utfdesciption = strdup( (*env)->GetStringUTFChars(env, description, NULL) );
         m_atk_object_set_description(frame, utfdesciption);
     }
     else
@@ -145,13 +145,13 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring name, jstring description)
 {
-    static const char *utfdesciption;
-    static const char *utfname;
+    char *utfdesciption;
+    char *utfname;
     MAtkObject *object = M_ATK_OBJECT ((gpointer) refency);
     if (frame == object){
         fprintf(stderr, "ATKWindowEventListener_FrameOpened name is:");
 		if (name != NULL){
-			utfname = (*env)->GetStringUTFChars(env, name, NULL);
+			utfname = strdup( (*env)->GetStringUTFChars(env, name, NULL) );
             m_atk_object_set_name(frame, utfname);
             fprintf(stderr, "%s ", utfname);
 		}
@@ -159,7 +159,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 			fprintf(stderr, "NULL ");
 		fprintf(stderr, "description is: ");
 		if (description != NULL){
-			utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
+			utfdesciption = strdup( (*env)->GetStringUTFChars(env, description, NULL) );
             m_atk_object_set_description(frame, utfdesciption);
 			fprintf(stderr, "%s\n", utfdesciption);
 		}

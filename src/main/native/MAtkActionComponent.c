@@ -99,10 +99,10 @@
  static void
  m_atk_action_component_init (MAtkActionComponent *self)
  {
-   atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_INVALID);
+   m_atk_object_set_role(M_ATK_OBJECT(self), ATK_ROLE_INVALID);
    atk_object_set_parent(ATK_OBJECT(self), NULL);
    m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Action Component");
-   m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the root component of mediator");
+   m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the Action Component of mediator");
    MAtkActionComponentPrivate *priv = m_atk_action_component_get_instance_private(self);
    priv->rectangle = g_new0 ( AtkRectangle, 1 );
    priv->layer = ATK_LAYER_INVALID;

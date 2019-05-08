@@ -13,8 +13,9 @@
 typedef struct
 {
 	GList *accessibleObjects;
-	const char *name;
-	const char *description;
+	AtkRole role;
+	char *name;
+	char *description;
 	AtkStateSet *states;
 	AtkRelationSet *relations;
 	AtkAttributeSet *attributes;
@@ -58,7 +59,6 @@ void m_atk_object_remove_state(MAtkObject *object, AtkStateType state)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private (object);
 	atk_state_set_remove_state(priv->states, state);
-
 	atk_object_notify_state_change( ATK_OBJECT(object), state, FALSE);
 }
 
@@ -104,19 +104,38 @@ m_atk_object_ref_child (AtkObject *obj, gint i)
   return item;
 }
 
-void m_atk_object_set_name(MAtkObject *object, const char *name)
+void
+m_atk_object_set_role (MAtkObject *object, AtkRole role)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
 	AtkPropertyValues *signalstuff = g_new0(AtkPropertyValues, 1);
-	GValue *old_value = g_new0 (GValue, 1);
-	GValue *new_value = g_new0 (GValue, 1);
-	g_value_init (old_value, G_TYPE_STRING);
-	g_value_init (new_value, G_TYPE_STRING);
-	g_value_set_string (old_value, priv->name);
-	g_value_set_string (new_value, name);
+	g_value_init (&signalstuff->old_value, ATK_TYPE_ROLE);
+	g_value_init (&signalstuff->new_value, ATK_TYPE_ROLE);
+	g_value_set_enum (&signalstuff->old_value, priv->role);
+	g_value_set_enum (&signalstuff->new_value, role);
+	signalstuff->property_name = "accessible-role";
+	priv->role = role;
+	g_signal_emit_by_name (object, "property-change", signalstuff, NULL);
+}
+
+AtkRole
+m_atk_object_get_role (AtkObject *obj)
+{
+	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), ATK_ROLE_INVALID);
+	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
+	return priv->role;
+}
+
+void
+m_atk_object_set_name (MAtkObject *object, char *name)
+{
+	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
+	AtkPropertyValues *signalstuff = g_new0(AtkPropertyValues, 1);
+	g_value_init (&signalstuff->old_value, G_TYPE_STRING);
+	g_value_init (&signalstuff->new_value, G_TYPE_STRING);
+	g_value_set_string (&signalstuff->old_value, priv->name);
+	g_value_set_string (&signalstuff->new_value, name);
 	signalstuff->property_name = "accessible-name";
-	signalstuff->old_value = *old_value;
-	signalstuff->new_value = *new_value;
 	priv->name = name;
 	g_signal_emit_by_name (object, "property-change", signalstuff, NULL);
 }
@@ -126,22 +145,20 @@ m_atk_object_get_name(AtkObject *obj)
 {
 	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
+	//fprintf(stderr, "%s\n", priv->name);
 	return strdup(priv->name);
 }
 
-void m_atk_object_set_description(MAtkObject *object, const char *description)
+void
+m_atk_object_set_description(MAtkObject *object, char *description)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private (object);
 	AtkPropertyValues *signalstuff = g_new0 (AtkPropertyValues, 1);
-	GValue *old_value = g_new0 (GValue, 1);
-	GValue *new_value = g_new0 (GValue, 1);
-	g_value_init (old_value, G_TYPE_STRING);
-	g_value_init (new_value, G_TYPE_STRING);
-	g_value_set_string (old_value, priv->description);
-	g_value_set_string (new_value, description);
+	g_value_init (&signalstuff->old_value, G_TYPE_STRING);
+	g_value_init (&signalstuff->new_value, G_TYPE_STRING);
+	g_value_set_string (&signalstuff->old_value, priv->description);
+	g_value_set_string (&signalstuff->new_value, description);
 	signalstuff->property_name = "accessible-description";
-	signalstuff->old_value = *old_value;
-	signalstuff->new_value = *new_value;
 	priv->description = description;
 	g_signal_emit_by_name (object, "property-change", signalstuff, NULL);
 }
@@ -245,16 +262,17 @@ m_atk_object_finalize (GObject *obj)
 static void
 m_atk_object_class_init (MAtkObjectClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
-  atk_class->get_n_children = m_atk_object_get_n_children;
-  atk_class->ref_child = m_atk_object_ref_child;
+	atk_class->get_n_children = m_atk_object_get_n_children;
+	atk_class->ref_child = m_atk_object_ref_child;
+	atk_class->get_role = m_atk_object_get_role;
 	atk_class->get_name = m_atk_object_get_name;
-  atk_class->get_description = m_atk_object_get_description;
-  atk_class->ref_state_set = m_atk_object_ref_state_set;
+	atk_class->get_description = m_atk_object_get_description;
+	atk_class->ref_state_set = m_atk_object_ref_state_set;
 	atk_class->ref_relation_set = m_atk_object_ref_relation_set;
-  atk_class->get_attributes = m_atk_object_get_attributes;
+	atk_class->get_attributes = m_atk_object_get_attributes;
 
   object_class->finalize = m_atk_object_finalize;
 }
@@ -270,10 +288,10 @@ m_atk_object_new (void)
 static void
 m_atk_object_init (MAtkObject *self)
 {
-	atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_INVALID);
+	m_atk_object_set_role(self, ATK_ROLE_INVALID);
 	atk_object_set_parent(ATK_OBJECT(self), NULL);
-  m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Object");
-  m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the object component of mediator");
+  	m_atk_object_set_name(self,"M Atk Object");
+  	m_atk_object_set_description(self,"this is the description of the object component of mediator");
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(self);
 	priv->accessibleObjects = NULL;
 	priv->states = atk_state_set_new();

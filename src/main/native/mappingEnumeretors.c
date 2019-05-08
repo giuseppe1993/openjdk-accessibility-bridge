@@ -25,6 +25,7 @@
       return ATK_ROLE_PAGE_TAB_LIST;
     if ( strcmp(role,"page tab") == 0 )
       return ATK_ROLE_PAGE_TAB;
+    fprintf(stderr, "%s\n", role);
     g_return_val_if_reached(ATK_ROLE_INVALID);
   }
 
@@ -46,5 +47,7 @@
       return ATK_STATE_SELECTABLE;
     if ( strcmp(state,"checked") == 0 )
       return ATK_STATE_CHECKED;
+    if ( strcmp(state,"selected") == 0)
+        return ATK_STATE_SELECTED;
     g_return_val_if_reached(ATK_STATE_INVALID);
   }
