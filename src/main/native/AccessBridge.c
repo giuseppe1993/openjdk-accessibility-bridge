@@ -31,7 +31,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <atk-bridge.h>
-#include "MAtkRoot.h"
+#include "mediatorAtk.h"
 
 static AtkObject *root = NULL;
 static GMainLoop *mainloop = NULL;
@@ -40,7 +40,13 @@ static AtkObject*
 get_root (void)
 {
     if (!root)
-        root = ATK_OBJECT(m_atk_root_new ());
+    {
+        root = ATK_OBJECT(m_atk_object_new ());
+        atk_object_set_role(root, ATK_ROLE_APPLICATION);
+    	atk_object_set_parent(root, NULL);
+        atk_object_set_name(root,"M Atk Root");
+        atk_object_set_description(root,"this is the description of the root component of mediator");
+    }
     return root;
 }
 

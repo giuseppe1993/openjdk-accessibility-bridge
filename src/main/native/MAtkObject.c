@@ -23,7 +23,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (MAtkObject, m_atk_object, ATK_TYPE_OBJECT)
 MAtkObject *
 m_atk_object_new (void)
 {
-   MAtkObject *object = g_object_new (ATK_TYPE_OBJECT, NULL);
+   MAtkObject *object = g_object_new (M_TYPE_ATK_OBJECT, NULL);
    atk_object_initialize (ATK_OBJECT(object), NULL);
    return object;
 }
