@@ -65,29 +65,27 @@ setup_atk_util (void)
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK(JNIEnv *env, jclass AccessBridgeClass)
 {
-  setup_atk_util();
-  int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
-  if(init_outcome)
-    if(!root)
-    {
-      fprintf(stderr, "Problems\n");
-      root = atk_get_root();
-    }
-
-  fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_AccessBridge_initATK\n");
-
-  return (jlong) root;
+    setup_atk_util();
+    int init_outcome = atk_bridge_adaptor_init (NULL, NULL);
+    if(init_outcome)
+        if(!root)
+        {
+            root = atk_get_root();
+            g_return_val_if_reached ( (jlong)root );
+        }
+    return (jlong) root;
 }
 
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_AccessBridge_runMainLoopATK(JNIEnv *env, jclass AccessBridgeClass)
 {
-  if(!mainloop){
-    mainloop = g_main_loop_new (NULL, FALSE);
-    mainloop = g_main_loop_ref(mainloop);
-    g_main_loop_run (mainloop);
-  }
-  else
-    if(!g_main_loop_is_running(mainloop))
-      g_main_loop_run (mainloop);
+    if(!mainloop)
+    {
+        mainloop = g_main_loop_new (NULL, FALSE);
+        mainloop = g_main_loop_ref(mainloop);
+        g_main_loop_run (mainloop);
+    }
+    else
+        if(!g_main_loop_is_running(mainloop))
+            g_main_loop_run (mainloop);
 }

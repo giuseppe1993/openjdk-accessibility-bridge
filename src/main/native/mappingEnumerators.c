@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "mappingEnumeretors.h"
+#include "mappingEnumerators.h"
 
   AtkRole mapping_role_from_Java(const char * role)
   {

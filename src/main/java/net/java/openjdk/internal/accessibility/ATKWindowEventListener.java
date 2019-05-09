@@ -39,75 +39,27 @@ public class ATKWindowEventListener implements WindowListener {
     private static native long newAtkComponent (long referency);
     private static native long newAtkAction (long referency);
     private static native long newAtkActionComponent (long referency);
+    private static native void setRole(long object, String role);
+    private static native void setStates(long object, String states);
+    private static native void setBound(long object, int x, int y, int width, int height);
 
-    private static native void freeAtkFrame(long cObject);
-    private static native void atkFrameOpened(long cObject, String name, String description);
-    private static native void atkFrameClosing(long cObject, String description);
-    private static native void atkFrameClosed(long cObject, String description);
-    private static native void atkFrameIconified(long cObject, String description);
-    private static native void atkFrameDeiconified(long cObject, String description);
-    private static native void atkFrameActivated(long cObject, String description);
-    private static native void atkFrameDeactivated(long cObject, String description);
+    private static native void freeAtkFrame(long frameReferency);
+    private static native void atkFrameOpened(long frameReferency, String name, String description);
+    private static native void atkFrameClosing(long frameReferency, String description);
+    private static native void atkFrameClosed(long frameReferency, String description);
+    private static native void atkFrameIconified(long frameReferency, String description);
+    private static native void atkFrameDeiconified(long frameReferency, String description);
+    private static native void atkFrameActivated(long frameReferency, String description);
+    private static native void atkFrameDeactivated(long frameReferency, String description);
 
-    private long cObject;
+    private long frameReferency;
 
 	public ATKWindowEventListener(long root) {
         super();
-        cObject = initAtkFrame(root);
-        System.err.println("the refency of the AtkRoot: "+root+" the referecy of the AtkWindows: "+cObject);
+        frameReferency = initAtkFrame(root);
+        System.err.println("J Mediator Root referency: "+root+" Java Frame Root: "+frameReferency);
     }
-/*
-    void printInformation(AccessibleContext ac){
-        AccessibleStateSet states = ac.getAccessibleStateSet();
-        int nchild = ac.getAccessibleChildrenCount();
-        AccessibleRole accessibleRole = ac.getAccessibleRole();
-        AccessibleRole fatherAccessibleRole= ac.getAccessibleParent().getAccessibleContext().getAccessibleRole();
-        System.err.println("\nThe child of: '"+fatherAccessibleRole.toString()+"' have this role: "+accessibleRole.toString()+
-        "\nthis states: ["+states.toString()+"]\nand this numeber of child: "+nchild);
-        AccessibleAction action = null;
-        if ( (action = ac.getAccessibleAction()) != null ){
-          int count = action.getAccessibleActionCount();
-          System.err.println("Implement Java Action and have "+count+" actions:[");
-          for ( int i = 0; i < count; i++ ) {
-            String description = action.getAccessibleActionDescription(i);
-            System.err.println("\tAction n. "+i+" description: "+description);
-          }
-          System.err.println("]");
-        }
-        AccessibleComponent component = null;
-        if( (component = ac.getAccessibleComponent() )!= null){
-            Rectangle bound = component.getBounds();
-            System.err.println("Implement Java Compontent and have this dimension : "+bound.toString());
-        }
-        if( ac.getAccessibleEditableText() != null ){
-          System.err.println("Implement Java Editable Text interface");
-        }
-        AccessibleSelection selection = null;
-        if( ( selection = ac.getAccessibleSelection() ) != null ){
-          int count = selection.getAccessibleSelectionCount();
-          System.err.println("Implement Java Selection interface and have n. "+count+" child");
-        }
-        AccessibleRelationSet relationSet = null;
-        if( (relationSet = ac.getAccessibleRelationSet() ) != null ){
-          System.err.println("Have Java Relation Set and have this toString() method :["+relationSet.toString()+"]");
-        }
-        if( ac.getAccessibleTable() != null ){
-          System.err.println("Implement Java Table interface");
-        }
-        if( ac.getAccessibleText() != null ){
-          System.err.println("Implement Java Text interface");
-        }
-        if( ac.getAccessibleValue() != null ){
-          System.err.println("Implement Java Value interface");
-        }
-        if ( nchild > 0 ){
-            for ( int i =0; i < nchild ;i++ ){
-                AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
-                printInformation(child);
-            }
-        }
-    }
-*/
+
     @Override
     public void windowOpened(WindowEvent e) {
         Object frame = e.getSource();
@@ -164,13 +116,24 @@ public class ATKWindowEventListener implements WindowListener {
                 printInformation(child);
             }
 */
-            //TODO take all Accessibility content.
-            // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
-
-            //TODO push all in C Object
-            atkFrameOpened(cObject, name, description);
+            String accessibleRole = ac.getAccessibleRole().toString();
+            atkFrameOpened(frameReferency, name, description);
+            setRole(frameReferency,accessibleRole);
+            AccessibleComponent component = null;
+            if( (component = ac.getAccessibleComponent() )!= null){
+                Rectangle bound = component.getBounds();
+                int height = (int) bound.getHeight();
+                int width = (int) bound.getWidth();
+                int x = (int) bound.getX();
+                int y = (int) bound.getY();
+                setBound(frameReferency, x, y, width, height);
+            }
+            String states = ac.getAccessibleStateSet().toString();
+            states = states.replace("[","");
+            states = states.replace("]","");
+            setStates(frameReferency, states);
         }
     }
 
@@ -181,7 +144,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameClosing(cObject, description);
+            atkFrameClosing(frameReferency, description);
             //System.err.println("closing: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -193,7 +156,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameClosed(cObject, description);
+            atkFrameClosed(frameReferency, description);
             //System.err.println("closed: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -205,7 +168,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameIconified(cObject, description);
+            atkFrameIconified(frameReferency, description);
             //System.err.println("iconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -217,7 +180,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameDeiconified(cObject, description);
+            atkFrameDeiconified(frameReferency, description);
             //System.err.println("Deiconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -229,7 +192,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameActivated(cObject, description);
+            atkFrameActivated(frameReferency, description);
             //System.err.println("activated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -241,7 +204,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameDeactivated(cObject, description);
+            atkFrameDeactivated(frameReferency, description);
             //System.err.println("deactivated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
@@ -250,7 +213,7 @@ public class ATKWindowEventListener implements WindowListener {
     protected void finalize() throws Throwable {
     	//when the Garbage collector destroy this object destroy also the C object
     	super.finalize();
-    	freeAtkFrame(cObject);
+    	freeAtkFrame(frameReferency);
     }
 
 }

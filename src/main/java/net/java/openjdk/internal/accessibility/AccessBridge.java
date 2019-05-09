@@ -33,7 +33,6 @@ public class AccessBridge {
 
     private static native long initATK();
     private static native void runMainLoopATK();
-    private static native void stopMainLoopATK();
     private static long atkRoot;
     private static Thread mainloop;
 
@@ -46,7 +45,7 @@ public class AccessBridge {
             }
         });
         mainloop.start();
-        System.err.println("the refency of the AtkRoot: "+atkRoot);
+        System.err.println("J the refency of the AtkRoot: "+atkRoot);
     }
 
     public AccessBridge() {
