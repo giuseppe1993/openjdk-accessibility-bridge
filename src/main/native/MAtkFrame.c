@@ -53,8 +53,8 @@ m_atk_frame_init (MAtkFrame *self)
 {
 	atk_object_set_role (ATK_OBJECT(self), ATK_ROLE_FRAME);
 	atk_object_set_parent (ATK_OBJECT(self), NULL);
-	m_atk_object_set_name(M_ATK_OBJECT(self),"Atk Frame");
-  m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the frame component");
+	atk_object_set_name(ATK_OBJECT(self),"Atk Frame");
+  	atk_object_set_description(ATK_OBJECT(self),"this is the description of the frame component");
 	m_atk_component_set_layer (M_ATK_COMPONENT(self), ATK_LAYER_WINDOW);
 	m_atk_component_set_coord_type (M_ATK_COMPONENT(self), ATK_XY_SCREEN);
 }

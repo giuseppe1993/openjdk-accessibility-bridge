@@ -6,21 +6,22 @@
 #include <atk/atk.h>
 #include "MAtkFrame.h"
 
-static MAtkObject *frame = NULL;
-static char *utfdesciption;
-static char *utfname;
+static AtkObject *frame = NULL;
+static const gchar *utfdesciption;
+static const gchar *utfname;
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong root)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
 {
+    MAtkObject * root = M_ATK_OBJECT( (gpointer) referency);
     fprintf(stderr, "Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame\n");
     if (!frame)
     {
-      frame = M_ATK_OBJECT(m_atk_frame_new ());
-      m_atk_object_add_child(root,ATK_OBJECT(frame));
+      frame = ATK_OBJECT ( m_atk_frame_new () );
+      m_atk_object_add_child (root, frame);
       g_object_ref (frame);
     }
-    return frame;
+    return (jlong) frame;
 
 }
 
@@ -34,11 +35,11 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_freeAtkFrame
 JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpened (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring name, jstring description)
 {
-	if (frame == cObject){
+	if ( (jlong)frame == cObject){
 		fprintf(stderr, "ATKWindowEventListener_FrameOpened name is:");
 		if (name != NULL){
 			utfname = (*env)->GetStringUTFChars(env, name, NULL);
-      m_atk_object_set_name(frame, utfname);
+            atk_object_set_name (frame, utfname);
 			fprintf(stderr, "%s ", utfname);
 		}
 		else
@@ -46,13 +47,13 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameOpen
 		fprintf(stderr, "description is: ");
 		if (description != NULL){
 			utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
-      m_atk_object_set_description(frame, utfdesciption);
+            atk_object_set_description (frame, utfdesciption);
 			fprintf(stderr, "%s\n", utfdesciption);
 		}
 		else
 			fprintf(stderr, "NULL\n");
 
-    m_atk_component_set_bound (frame, 10, 10, 10, 10);
+    m_atk_component_set_bound (M_ATK_COMPONENT(frame), 10, 10, 10, 10);
 	}
 }
 

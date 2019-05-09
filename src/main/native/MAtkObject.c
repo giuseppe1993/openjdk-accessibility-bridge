@@ -13,8 +13,6 @@
 typedef struct
 {
 	GList *accessibleObjects;
-	char *name;
-	char *description;
 	AtkStateSet *states;
 	AtkRelationSet *relations;
 	AtkAttributeSet *attributes;
@@ -105,34 +103,6 @@ m_atk_object_ref_child (AtkObject *obj, gint i)
   g_object_ref (item);
 
   return item;
-}
-
-void m_atk_object_set_name(MAtkObject *object, char *name)
-{
-	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
-	priv->name = name;
-}
-
-static const char*
-m_atk_object_get_name(AtkObject *obj)
-{
-	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
-	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
-	return strdup(priv->name);
-}
-
-void m_atk_object_set_description(MAtkObject *object, char *description)
-{
-	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(object);
-	priv->description = description;
-}
-
-static const char*
-m_atk_object_get_description(AtkObject *obj)
-{
-	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
-	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
-	return strdup(priv->description);
 }
 
 static void*
@@ -229,15 +199,13 @@ m_atk_object_class_init (MAtkObjectClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
-  atk_class->get_n_children = m_atk_object_get_n_children;
-  atk_class->ref_child = m_atk_object_ref_child;
-	atk_class->get_name = m_atk_object_get_name;
-  atk_class->get_description = m_atk_object_get_description;
-  atk_class->ref_state_set = m_atk_object_ref_state_set;
+  	atk_class->get_n_children = m_atk_object_get_n_children;
+  	atk_class->ref_child = m_atk_object_ref_child;
+  	atk_class->ref_state_set = m_atk_object_ref_state_set;
 	atk_class->ref_relation_set = m_atk_object_ref_relation_set;
-  atk_class->get_attributes = m_atk_object_get_attributes;
+  	atk_class->get_attributes = m_atk_object_get_attributes;
 
-  object_class->finalize = m_atk_object_finalize;
+  	object_class->finalize = m_atk_object_finalize;
 }
 
 static void
@@ -245,8 +213,6 @@ m_atk_object_init (MAtkObject *self)
 {
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(self);
 	priv->accessibleObjects = NULL;
-	priv->name = NULL;
-	priv->description = NULL;
 	priv->states = atk_state_set_new();
 	priv->relations = atk_relation_set_new();
 	priv->attributes = NULL;

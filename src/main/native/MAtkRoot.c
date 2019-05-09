@@ -52,8 +52,8 @@ m_atk_root_class_init (MAtkRootClass *klass)
 static void
 m_atk_root_init (MAtkRoot *self)
 {
-  atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_APPLICATION);
+    atk_object_set_role(ATK_OBJECT(self), ATK_ROLE_APPLICATION);
 	atk_object_set_parent(ATK_OBJECT(self), NULL);
-  m_atk_object_set_name(M_ATK_OBJECT(self),"M Atk Root");
-  m_atk_object_set_description(M_ATK_OBJECT(self),"this is the description of the root component of mediator");
+    atk_object_set_name(ATK_OBJECT(self),"M Atk Root");
+    atk_object_set_description(ATK_OBJECT(self),"this is the description of the root component of mediator");
 }
