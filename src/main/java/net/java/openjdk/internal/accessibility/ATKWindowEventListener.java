@@ -34,8 +34,6 @@ import javax.accessibility.*;
 
 public class ATKWindowEventListener implements WindowListener {
 
-    private static native long initAtkFrame(long root);
-
     private static native long newAtkComponent (long referency);
     private static native long newAtkAction (long referency);
     private static native long newAtkActionComponent (long referency);
@@ -45,8 +43,6 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void setStates (long object, String states);
     private static native void setBound (long object, int x, int y, int width, int height);
 
-    private static native void freeAtkFrame(long frameReferency);
-    private static native void atkFrameOpened(long frameReferency, String name, String description);
     private static native void atkFrameClosing(long frameReferency, String description);
     private static native void atkFrameClosed(long frameReferency, String description);
     private static native void atkFrameIconified(long frameReferency, String description);
@@ -58,7 +54,7 @@ public class ATKWindowEventListener implements WindowListener {
 
 	public ATKWindowEventListener(long root) {
         super();
-        frameReferency = initAtkFrame(root);
+        frameReferency = newAtkComponent(root);
         System.err.println("J Mediator Root referency: "+root+" Java Frame Root: "+frameReferency);
     }
 
