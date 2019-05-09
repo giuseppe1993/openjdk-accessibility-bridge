@@ -18,7 +18,15 @@ typedef struct
 	AtkAttributeSet *attributes;
 } MAtkObjectPrivate;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (MAtkObject, m_atk_object, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (MAtkObject, m_atk_object, ATK_TYPE_OBJECT)
+
+MAtkObject *
+m_atk_object_new (void)
+{
+   MAtkObject *object = g_object_new (ATK_TYPE_OBJECT, NULL);
+   atk_object_initialize (ATK_OBJECT(object), NULL);
+   return object;
+}
 
 void
 m_atk_object_add_child(MAtkObject *object, AtkObject *obj)
@@ -63,6 +71,7 @@ void m_atk_object_remove_state(MAtkObject *object, AtkStateType state)
 static AtkRelationSet*
 m_atk_object_ref_relation_set(AtkObject *obj)
 {
+	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
 	return g_object_ref(priv->relations);
 }
@@ -70,6 +79,7 @@ m_atk_object_ref_relation_set(AtkObject *obj)
 static AtkStateSet*
 m_atk_object_ref_state_set(AtkObject *obj)
 {
+	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
 	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
 	return g_object_ref(priv->states);
 }
@@ -77,32 +87,30 @@ m_atk_object_ref_state_set(AtkObject *obj)
 static gint
 m_atk_object_get_n_children (AtkObject *obj)
 {
-  MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
-  return g_list_length (priv->accessibleObjects);
+	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), 0);
+	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
+	return g_list_length (priv->accessibleObjects);
 }
 
 static AtkObject*
 m_atk_object_ref_child (AtkObject *obj, gint i)
 {
-  GList *obj_list = NULL;
-  gint num = 0;
-  AtkObject *item = NULL;
+	g_return_val_if_fail (M_IS_ATK_OBJECT(obj), NULL);
 
-  MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
+	GList *obj_list = NULL;
+	gint num = 0;
+	AtkObject *item = NULL;
 
-  obj_list = priv->accessibleObjects;
+	MAtkObjectPrivate *priv = m_atk_object_get_instance_private(M_ATK_OBJECT(obj));
+	obj_list = priv->accessibleObjects;
+	num = g_list_length (obj_list);
 
-  num = g_list_length (obj_list);
-
-  g_return_val_if_fail ((i < num)&&(i >= 0), NULL);
-
-  item = g_list_nth_data (obj_list, i);
-  if (!item)
-      return NULL;
-
-  g_object_ref (item);
-
-  return item;
+	g_return_val_if_fail ((i < num)&&(i >= 0), NULL);
+	item = g_list_nth_data (obj_list, i);
+	if (!item)
+		return NULL;
+	g_object_ref (item);
+	return item;
 }
 
 static void*

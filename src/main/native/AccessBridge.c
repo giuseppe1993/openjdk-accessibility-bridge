@@ -39,27 +39,25 @@ static GMainLoop *mainloop = NULL;
 static AtkObject*
 get_root (void)
 {
-  if (!root)
-    root = ATK_OBJECT(m_atk_root_new ());
-
-  return root;
+    if (!root)
+        root = ATK_OBJECT(m_atk_root_new ());
+    return root;
 }
 
 static const gchar *
 get_toolkit_name (void)
 {
-  return "Mediator AtkUtil";
+    return "Mediator AtkUtil";
 }
 
 static void
 setup_atk_util (void)
 {
-  AtkUtilClass *klass;
-
-  klass = g_type_class_ref (ATK_TYPE_UTIL);
-  klass->get_root = get_root;
-  klass->get_toolkit_name = get_toolkit_name;
-  g_type_class_unref (klass);
+    AtkUtilClass *klass;
+    klass = g_type_class_ref (ATK_TYPE_UTIL);
+    klass->get_root = get_root;
+    klass->get_toolkit_name = get_toolkit_name;
+    g_type_class_unref (klass);
 }
 
 JNIEXPORT jlong JNICALL

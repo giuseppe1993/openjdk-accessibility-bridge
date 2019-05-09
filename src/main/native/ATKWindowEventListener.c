@@ -98,6 +98,22 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNI
 }
 
 JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setName (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring name)
+{
+    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    const gchar *utfname = (*env)->GetStringUTFChars(env, name, NULL);
+    atk_object_set_name (object, utfname);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setDescription (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring description)
+{
+    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    const gchar *utfdescription = (*env)->GetStringUTFChars(env, description, NULL);
+    atk_object_set_description (object, utfdescription);
+}
+
+JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint x, jint y, jint width, jint height)
 {
     MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);

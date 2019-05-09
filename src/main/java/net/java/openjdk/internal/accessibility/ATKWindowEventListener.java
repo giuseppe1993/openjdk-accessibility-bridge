@@ -39,9 +39,11 @@ public class ATKWindowEventListener implements WindowListener {
     private static native long newAtkComponent (long referency);
     private static native long newAtkAction (long referency);
     private static native long newAtkActionComponent (long referency);
-    private static native void setRole(long object, String role);
-    private static native void setStates(long object, String states);
-    private static native void setBound(long object, int x, int y, int width, int height);
+    private static native void setRole (long object, String role);
+    private static native void setName (long object, String name);
+    private static native void setDescription (long object, String description);
+    private static native void setStates (long object, String states);
+    private static native void setBound (long object, int x, int y, int width, int height);
 
     private static native void freeAtkFrame(long frameReferency);
     private static native void atkFrameOpened(long frameReferency, String name, String description);
@@ -66,61 +68,12 @@ public class ATKWindowEventListener implements WindowListener {
         if (frame instanceof Accessible) {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
-/*
-            AccessibleStateSet states = ac.getAccessibleStateSet();
-            int nchild = ac.getAccessibleChildrenCount();
-            AccessibleRole accessibleRole = ac.getAccessibleRole();
-            System.err.println("\nJava Root name is :'"+ac.getAccessibleName()+"' have this description:'"+
-            ac.getAccessibleDescription()+"'\nhave this role: "+
-            accessibleRole.toString()+"\nhave this states: ["+
-            states.toString()+"]\nthe numeber of child is:"+nchild);
-            AccessibleAction action = null;
-            if ( (action = ac.getAccessibleAction()) != null ){
-              int count = action.getAccessibleActionCount();
-              System.err.println("Implement Java Action and have "+count+" actions:[");
-              for ( int i = 0; i < count; i++ ) {
-                String description = action.getAccessibleActionDescription(i);
-              System.err.println("\tAction n. "+i+" description: "+description);
-              }
-              System.err.println("]");
-            }
-            AccessibleComponent component = null;
-            if( (component = ac.getAccessibleComponent() )!= null){
-                Rectangle bound = component.getBounds();
-                System.err.println("Implement Java Compontent and have this dimension :"+bound.toString());
-            }
-            if( ac.getAccessibleEditableText() != null ){
-              System.err.println("Implement Java Editable Text interface");
-            }
-            AccessibleSelection selection = null;
-            if( ( selection = ac.getAccessibleSelection() ) != null ){
-              int count = selection.getAccessibleSelectionCount();
-              System.err.println("Implement Java Selection interface and have n. "+count+" child");
-            }
-            AccessibleRelationSet relationSet = null;
-            if( (relationSet = ac.getAccessibleRelationSet() ) != null ){
-              System.err.println("Have Java Relation Set and have this toString() method :["+relationSet.toString()+"]");
-            }
-            if( ac.getAccessibleTable() != null ){
-              System.err.println("Implement Java Table interface");
-            }
-            if( ac.getAccessibleText() != null ){
-              System.err.println("Implement Java Text interface");
-            }
-            if( ac.getAccessibleValue() != null ){
-              System.err.println("Implement Java Value interface");
-            }
-
-            for (int i =0; i<nchild;i++){
-                AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
-                printInformation(child);
-            }
-*/
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
             String accessibleRole = ac.getAccessibleRole().toString();
-            atkFrameOpened(frameReferency, name, description);
-            setRole(frameReferency,accessibleRole);
+            setRole (frameReferency, accessibleRole);
+            setName (frameReferency, name);
+            setDescription (frameReferency, description);
             AccessibleComponent component = null;
             if( (component = ac.getAccessibleComponent() )!= null){
                 Rectangle bound = component.getBounds();
@@ -145,7 +98,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameClosing(frameReferency, description);
-            //System.err.println("closing: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
 
@@ -157,7 +109,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameClosed(frameReferency, description);
-            //System.err.println("closed: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
 
@@ -169,7 +120,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameIconified(frameReferency, description);
-            //System.err.println("iconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
 
@@ -181,7 +131,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameDeiconified(frameReferency, description);
-            //System.err.println("Deiconified: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
 
@@ -193,7 +142,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameActivated(frameReferency, description);
-            //System.err.println("activated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
 
@@ -205,15 +153,6 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
             atkFrameDeactivated(frameReferency, description);
-            //System.err.println("deactivated: " + ac.getAccessibleDescription() + " - " + ac);
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-    	//when the Garbage collector destroy this object destroy also the C object
-    	super.finalize();
-    	freeAtkFrame(frameReferency);
-    }
-
 }
