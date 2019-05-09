@@ -14,16 +14,9 @@
      GList *accessibleActions;
  } MAtkActionPrivate;
 
-struct _RealAction {
-   gchar* description;
-   gchar* name;
-   gchar* keybinding;
-   gchar* localizedname;
- };
-
  static void m_atk_action_atk_action_init (AtkActionIface *iface);
 
- G_DEFINE_ABSTRACT_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })
+ G_DEFINE_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })
 
 static gint
 m_atk_action_get_n_actions(AtkAction *action)
@@ -81,6 +74,14 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
      iface->get_name = m_atk_action_get_name;
      iface->get_keybinding = m_atk_action_get_keybinding;
      iface->get_localized_name = m_atk_action_get_localized_name;
+ }
+
+ MAtkAction *
+ m_atk_action_new (void)
+ {
+    MAtkAction *action = g_object_new (M_TYPE_ATK_ACTION, NULL);
+    atk_object_initialize (ATK_OBJECT(action), NULL);
+    return action;
  }
 
  static void

@@ -196,8 +196,8 @@ m_atk_object_finalize (GObject *obj)
 static void
 m_atk_object_class_init (MAtkObjectClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
   	atk_class->get_n_children = m_atk_object_get_n_children;
   	atk_class->ref_child = m_atk_object_ref_child;

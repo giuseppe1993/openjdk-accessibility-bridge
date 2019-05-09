@@ -4,11 +4,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <atk/atk.h>
+#include "mediatorAtk.h"
 #include "MAtkFrame.h"
 
 static AtkObject *frame = NULL;
 static const gchar *utfdesciption;
 static const gchar *utfname;
+
+JNIEXPORT jlong JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+{
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    m_atk_object_add_child (father, frame);
+    g_object_ref (child);
+    return (jlong) child;
+}
+
+JNIEXPORT jlong JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+{
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    m_atk_object_add_child (father, frame);
+    g_object_ref (child);
+    return (jlong) child;
+}
+
+JNIEXPORT jlong JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkActionComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+{
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    m_atk_object_add_child (father, frame);
+    g_object_ref (child);
+    return (jlong) child;
+}
+
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_initAtkFrame (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)

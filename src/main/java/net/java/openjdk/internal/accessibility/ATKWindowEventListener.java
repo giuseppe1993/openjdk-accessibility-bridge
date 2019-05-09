@@ -35,6 +35,11 @@ import javax.accessibility.*;
 public class ATKWindowEventListener implements WindowListener {
 
     private static native long initAtkFrame(long root);
+
+    private static native long newAtkComponent (long referency);
+    private static native long newAtkAction (long referency);
+    private static native long newAtkActionComponent (long referency);
+
     private static native void freeAtkFrame(long cObject);
     private static native void atkFrameOpened(long cObject, String name, String description);
     private static native void atkFrameClosing(long cObject, String description);
@@ -163,7 +168,7 @@ public class ATKWindowEventListener implements WindowListener {
             // I think is better to do a independent method because for every override method you need to extract the informations
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
-            
+
             //TODO push all in C Object
             atkFrameOpened(cObject, name, description);
         }

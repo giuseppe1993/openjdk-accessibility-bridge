@@ -19,7 +19,7 @@ typedef struct
 
 static void m_atk_component_atk_component_init (AtkComponentIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (MAtkComponent, m_atk_component, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkComponent); G_IMPLEMENT_INTERFACE (atk_component_get_type(), m_atk_component_atk_component_init); })
+G_DEFINE_TYPE_WITH_CODE (MAtkComponent, m_atk_component, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkComponent); G_IMPLEMENT_INTERFACE (atk_component_get_type(), m_atk_component_atk_component_init); })
 
 static void
 m_atk_component_get_extents (AtkComponent *component, gint *x, gint *y, gint *width, gint *height, AtkCoordType coord_type)
@@ -44,6 +44,14 @@ m_atk_component_atk_component_init (AtkComponentIface *iface)
 {
     iface->get_extents = m_atk_component_get_extents;
     iface->get_layer = m_atk_component_get_layer;
+}
+
+MAtkComponent *
+m_atk_component_new (void)
+{
+   MAtkComponent *component = g_object_new (M_TYPE_ATK_COMPONENT, NULL);
+   atk_object_initialize (ATK_OBJECT(component), NULL);
+   return component;
 }
 
 void
@@ -92,7 +100,10 @@ m_atk_component_class_init (MAtkComponentClass *klass)
 static void
 m_atk_component_init (MAtkComponent *self)
 {
+    atk_object_set_name(ATK_OBJECT(self),"M Atk Component");
+    atk_object_set_description(ATK_OBJECT(self),"this is the description of the component of mediator");
     MAtkComponentPrivate *priv = m_atk_component_get_instance_private(self);
     priv->rectangle = g_new0 ( AtkRectangle, 1 );
     priv->layer = ATK_LAYER_INVALID;
+    priv->coord_type = ATK_XY_WINDOW;
 }

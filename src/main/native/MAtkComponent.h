@@ -22,7 +22,7 @@ struct _MAtkComponentClass
   MAtkObjectClass parent_class;
 };
 
-//protected
+MAtkComponent *m_atk_component_new (void);
 void m_atk_component_set_layer (MAtkComponent *self, AtkLayer layer);
 void m_atk_component_set_bound (MAtkComponent *self, gint x, gint y, gint width, gint height);
 void m_atk_component_set_coord_type (MAtkComponent *self, AtkCoordType coord_type);
