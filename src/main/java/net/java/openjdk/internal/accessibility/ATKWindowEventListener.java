@@ -27,6 +27,7 @@
 package net.java.openjdk.internal.accessibility;
 
 import java.awt.Rectangle;
+import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -43,6 +44,8 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void setStates (long object, String states);
     private static native void setBound (long object, int x, int y, int width, int height);
     private static native void setActionBound (long object, int x, int y, int width, int height);
+    private static native void setLayer(long object, int layer);
+    private static native void setActionLayer(long object, int layer);
 
     private static native void atkFrameClosing(long frameReferency, String description);
     private static native void atkFrameClosed(long frameReferency, String description);
@@ -50,7 +53,6 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void atkFrameDeiconified(long frameReferency, String description);
     private static native void atkFrameActivated(long frameReferency, String description);
     private static native void atkFrameDeactivated(long frameReferency, String description);
-
 
     private long frameReferency, rootReferecy;
 
@@ -83,12 +85,13 @@ public class ATKWindowEventListener implements WindowListener {
                 int width = (int) bound.getWidth();
                 int x = (int) bound.getX();
                 int y = (int) bound.getY();
-                setBound(frameReferency, x, y, width, height);
+                setBound (frameReferency, x, y, width, height);
+                setLayer (frameReferency, 7);
             }
             String states = ac.getAccessibleStateSet().toString();
             states = states.replace("[","");
             states = states.replace("]","");
-            setStates(frameReferency, states);
+            setStates (frameReferency, states);
 
             if ( nchild > 0 ){
                 for ( int i =0; i < nchild ;i++ ){
@@ -168,7 +171,7 @@ public class ATKWindowEventListener implements WindowListener {
     void createChildren (AccessibleContext ac, long father){
         String name = ac.getAccessibleName();
         if (name == null)
-            name="";
+            name=ac.getClass().getSimpleName();
         String description = ac.getAccessibleDescription();
         if (description == null)
             description = "";
@@ -202,9 +205,12 @@ public class ATKWindowEventListener implements WindowListener {
                 Rectangle bound = component.getBounds();
                 int height = (int) bound.getHeight();
                 int width = (int) bound.getWidth();
-                int x = (int) bound.getX();
-                int y = (int) bound.getY();
+                AccessibleContext fatherContext = ac.getAccessibleParent().getAccessibleContext();
+                Point fatherCorner = fatherContext.getAccessibleComponent().getLocation();
+                int x = (int) ( bound.getX() + fatherCorner.getX() );
+                int y = (int) ( bound.getY() + fatherCorner.getY() );
                 setActionBound (referency, x, y, width, height);
+                setActionLayer (referency, 3);
             }
             else
                 referency = newAtkAction(father);
@@ -221,9 +227,12 @@ public class ATKWindowEventListener implements WindowListener {
                 Rectangle bound = component.getBounds();
                 int height = (int) bound.getHeight();
                 int width = (int) bound.getWidth();
-                int x = (int) bound.getX();
-                int y = (int) bound.getY();
+                AccessibleContext fatherContext = ac.getAccessibleParent().getAccessibleContext();
+                Point fatherCorner = fatherContext.getAccessibleComponent().getLocation();
+                int x = (int) ( bound.getX() + fatherCorner.getX() );
+                int y = (int) ( bound.getY() + fatherCorner.getY() );
                 setBound (referency, x, y, width, height);
+                setLayer (referency, 3);
             }
         return referency;
     }

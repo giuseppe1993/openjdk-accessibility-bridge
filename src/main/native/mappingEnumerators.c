@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "mappingEnumerators.h"
 
-  AtkRole mapping_role_from_Java(const char * role)
+AtkRole mapping_role_from_Java(const char * role)
   {
     if ( strcmp(role,"frame") == 0 )
       return ATK_ROLE_FRAME;
@@ -29,25 +29,46 @@
     g_return_val_if_reached(ATK_ROLE_INVALID);
   }
 
-  AtkState mapping_state_from_Java(char *state)
-  {
+AtkState mapping_state_from_Java(char *state)
+{
     if ( strcmp(state,"enabled") == 0 )
-      return ATK_STATE_ENABLED;
+        return ATK_STATE_ENABLED;
     if ( strcmp(state,"focusable") == 0 )
-      return ATK_STATE_FOCUSABLE;
+        return ATK_STATE_FOCUSABLE;
     if ( strcmp(state,"visible") == 0 )
-      return ATK_STATE_VISIBLE;
+        return ATK_STATE_VISIBLE;
     if ( strcmp(state,"showing") == 0 )
-      return ATK_STATE_SHOWING;
+        return ATK_STATE_SHOWING;
     if ( strcmp(state,"resizable") == 0 )
-      return ATK_STATE_RESIZABLE;
+        return ATK_STATE_RESIZABLE;
     if ( strcmp(state,"opaque") == 0 )
-      return ATK_STATE_OPAQUE;
+        return ATK_STATE_OPAQUE;
     if ( strcmp(state,"selectable") == 0 )
-      return ATK_STATE_SELECTABLE;
+        return ATK_STATE_SELECTABLE;
     if ( strcmp(state,"checked") == 0 )
-      return ATK_STATE_CHECKED;
+        return ATK_STATE_CHECKED;
     if ( strcmp(state,"selected") == 0)
         return ATK_STATE_SELECTED;
     g_return_val_if_reached(ATK_STATE_INVALID);
-  }
+}
+
+AtkLayer simulate_mapping_from_Java (int value)
+{
+    if (value == 0)
+        return ATK_LAYER_INVALID;
+    if (value == 1)
+        return ATK_LAYER_BACKGROUND;
+    if (value == 2)
+        return ATK_LAYER_CANVAS;
+    if (value == 3)
+        return ATK_LAYER_WIDGET;
+    if (value == 4)
+        return ATK_LAYER_MDI;
+    if (value == 5)
+        return ATK_LAYER_POPUP;
+    if (value == 6)
+        return ATK_LAYER_OVERLAY;
+    if (value == 7)
+        return ATK_LAYER_WINDOW;
+    g_return_val_if_reached(ATK_LAYER_INVALID);        
+}

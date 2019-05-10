@@ -94,6 +94,22 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (J
 }
 
 JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint layer)
+{
+    MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);
+    AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
+    m_atk_component_set_layer (object, atklayer);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint layer)
+{
+    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) refency);
+    AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
+    m_atk_action_component_set_layer (object, atklayer);
+}
+
+JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClosing (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
 
