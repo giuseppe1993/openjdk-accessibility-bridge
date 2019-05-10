@@ -51,10 +51,12 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void atkFrameActivated(long frameReferency, String description);
     private static native void atkFrameDeactivated(long frameReferency, String description);
 
-    private long frameReferency;
+
+    private long frameReferency, rootReferecy;
 
 	public ATKWindowEventListener(long root) {
         super();
+        rootReferecy = root;
         frameReferency = newAtkComponent(root);
         System.err.println("J Mediator Root referency: "+root+" Java Frame Root: "+frameReferency);
     }
@@ -72,6 +74,8 @@ public class ATKWindowEventListener implements WindowListener {
             setRole (frameReferency, accessibleRole);
             setName (frameReferency, name);
             setDescription (frameReferency, description);
+            setName (rootReferecy, name);
+            setDescription (rootReferecy, description);
             AccessibleComponent component = null;
             if( (component = ac.getAccessibleComponent() )!= null){
                 Rectangle bound = component.getBounds();
