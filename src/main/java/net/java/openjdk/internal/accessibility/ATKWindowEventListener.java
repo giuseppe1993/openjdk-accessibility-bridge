@@ -66,6 +66,7 @@ public class ATKWindowEventListener implements WindowListener {
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String name = ac.getAccessibleName();
             String description = ac.getAccessibleDescription();
+            int nchild = ac.getAccessibleChildrenCount();
             String accessibleRole = ac.getAccessibleRole().toString();
             setRole (frameReferency, accessibleRole);
             setName (frameReferency, name);
@@ -83,6 +84,13 @@ public class ATKWindowEventListener implements WindowListener {
             states = states.replace("[","");
             states = states.replace("]","");
             setStates(frameReferency, states);
+
+            if ( nchild > 0 ){
+                for ( int i =0; i < nchild ;i++ ){
+                    AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
+                    createChildren(child, frameReferency);
+                }
+            }
         }
     }
 
@@ -151,4 +159,57 @@ public class ATKWindowEventListener implements WindowListener {
             atkFrameDeactivated(frameReferency, description);
         }
     }
+
+    void createChildren (AccessibleContext ac, long father){
+        String name = ac.getAccessibleName();
+        if (name == null)
+            name="";
+        String description = ac.getAccessibleDescription();
+        if (description == null)
+            description = "";
+        String accessibleRole = ac.getAccessibleRole().toString();
+        int nchild = ac.getAccessibleChildrenCount();
+        String states = ac.getAccessibleStateSet().toString();
+        states = states.replace("[","");
+        states = states.replace("]","");
+        long childReferency = bindingAtkInterfaces (ac ,father);
+        setRole (childReferency, accessibleRole);
+        setName (childReferency, name);
+        setDescription (childReferency, description);
+        setStates (childReferency, states);
+        if ( nchild > 0 ){
+            for ( int i =0; i < nchild ;i++ ){
+                AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
+                createChildren(child ,childReferency);
+            }
+        }
+    }
+
+    private long bindingAtkInterfaces (AccessibleContext ac, long father){
+        long referency = 0;
+        AccessibleAction action = null;
+        AccessibleComponent component = null;
+        if ( (action = ac.getAccessibleAction()) != null ){
+            referency = newAtkAction(father);
+          /*int count = action.getAccessibleActionCount();
+          System.err.println("Implement Java Action and have "+count+" actions:[");
+          for ( int i = 0; i < count; i++ ) {
+            String description = action.getAccessibleActionDescription(i);
+            System.err.println("\tAction n. "+i+" description: "+description);
+          }
+          System.err.println("]");*/
+        }
+        else
+            if( (component = ac.getAccessibleComponent() )!= null){
+                referency = newAtkComponent(father);
+                Rectangle bound = component.getBounds();
+                int height = (int) bound.getHeight();
+                int width = (int) bound.getWidth();
+                int x = (int) bound.getX();
+                int y = (int) bound.getY();
+                setBound(father, x, y, width, height);
+            }
+            return referency;
+    }
+
 }
