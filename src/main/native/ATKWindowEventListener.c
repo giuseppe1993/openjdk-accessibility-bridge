@@ -7,13 +7,11 @@
 #include "mediatorAtk.h"
 #include "mappingEnumerators.h"
 
-//static AtkObject *frame = NULL;
-
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
 {
     MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
-    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    AtkObject *child = ATK_OBJECT ( m_atk_component_new() );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
     return (jlong) child;
@@ -23,7 +21,7 @@ JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
 {
     MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
-    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    AtkObject *child = ATK_OBJECT ( m_atk_action_new () );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
     return (jlong) child;
@@ -33,7 +31,7 @@ JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkActionComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
 {
     MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
-    AtkObject *child = ATK_OBJECT ( m_atk_component_new () );
+    AtkObject *child = ATK_OBJECT ( m_atk_action_component_new() );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
     return (jlong) child;
@@ -69,6 +67,13 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JN
 {
     MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);
     m_atk_component_set_bound (object, x, y, width, height);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint x, jint y, jint width, jint height)
+{
+    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) refency);
+    m_atk_action_component_set_bound (object, x, y, width, height);
 }
 
 JNIEXPORT void JNICALL

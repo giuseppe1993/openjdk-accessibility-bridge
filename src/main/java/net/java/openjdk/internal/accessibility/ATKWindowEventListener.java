@@ -42,6 +42,7 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void setDescription (long object, String description);
     private static native void setStates (long object, String states);
     private static native void setBound (long object, int x, int y, int width, int height);
+    private static native void setActionBound (long object, int x, int y, int width, int height);
 
     private static native void atkFrameClosing(long frameReferency, String description);
     private static native void atkFrameClosed(long frameReferency, String description);
@@ -189,15 +190,26 @@ public class ATKWindowEventListener implements WindowListener {
         long referency = 0;
         AccessibleAction action = null;
         AccessibleComponent component = null;
+        AccessibleSelection selection = null;
+        AccessibleRelationSet relationSet = null;
         if ( (action = ac.getAccessibleAction()) != null ){
-            referency = newAtkAction(father);
-          /*int count = action.getAccessibleActionCount();
-          System.err.println("Implement Java Action and have "+count+" actions:[");
-          for ( int i = 0; i < count; i++ ) {
-            String description = action.getAccessibleActionDescription(i);
-            System.err.println("\tAction n. "+i+" description: "+description);
-          }
-          System.err.println("]");*/
+            if( (component = ac.getAccessibleComponent() )!= null){
+                referency = newAtkActionComponent(father);
+                Rectangle bound = component.getBounds();
+                int height = (int) bound.getHeight();
+                int width = (int) bound.getWidth();
+                int x = (int) bound.getX();
+                int y = (int) bound.getY();
+                setActionBound (referency, x, y, width, height);
+            }
+            else
+                referency = newAtkAction(father);
+
+            int count = action.getAccessibleActionCount();
+            for ( int i = 0; i < count; i++ ) {
+                String description = action.getAccessibleActionDescription(i);
+                System.err.println("Action n. "+i+" description: "+description);
+            }
         }
         else
             if( (component = ac.getAccessibleComponent() )!= null){
@@ -207,9 +219,9 @@ public class ATKWindowEventListener implements WindowListener {
                 int width = (int) bound.getWidth();
                 int x = (int) bound.getX();
                 int y = (int) bound.getY();
-                setBound(father, x, y, width, height);
+                setBound (referency, x, y, width, height);
             }
-            return referency;
+        return referency;
     }
 
 }

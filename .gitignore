@@ -1,6 +1,8 @@
 syntax: glob
 target/*
 bin/*
+tmp/*
+*.log
 *~
 .settings
 .classpath
