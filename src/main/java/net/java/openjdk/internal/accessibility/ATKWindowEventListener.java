@@ -26,7 +26,7 @@
 
 package net.java.openjdk.internal.accessibility;
 
-import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -80,11 +80,12 @@ public class ATKWindowEventListener implements WindowListener {
             setDescription (rootReferecy, description);
             AccessibleComponent component = null;
             if( (component = ac.getAccessibleComponent() )!= null){
-                Rectangle bound = component.getBounds();
-                int height = (int) bound.getHeight();
-                int width = (int) bound.getWidth();
-                int x = (int) bound.getX();
-                int y = (int) bound.getY();
+                Point position = component.getLocationOnScreen();
+                int x = (int) position.getX();
+                int y = (int) position.getY();
+                Dimension dim = component.getSize();
+                int height = (int) dim.getHeight();
+                int width = (int) dim.getWidth();
                 setBound (frameReferency, x, y, width, height);
                 setLayer (frameReferency, 7);
             }
@@ -202,13 +203,20 @@ public class ATKWindowEventListener implements WindowListener {
         if ( (action = ac.getAccessibleAction()) != null ){
             if( (component = ac.getAccessibleComponent() )!= null){
                 referency = newAtkActionComponent(father);
-                Rectangle bound = component.getBounds();
-                int height = (int) bound.getHeight();
-                int width = (int) bound.getWidth();
-                AccessibleContext fatherContext = ac.getAccessibleParent().getAccessibleContext();
-                Point fatherCorner = fatherContext.getAccessibleComponent().getLocation();
-                int x = (int) ( bound.getX() + fatherCorner.getX() );
-                int y = (int) ( bound.getY() + fatherCorner.getY() );
+                int x = 0;
+                int y = 0;
+                int height = 0;
+                int width = 0;
+                Point position = component.getLocationOnScreen();
+                if (position != null){
+                    x = (int) position.getX();
+                    y = (int) position.getY();
+                    Dimension dim = component.getSize();
+                    if (dim != null){
+                        height = (int) dim.getHeight();
+                        width = (int) dim.getWidth();
+                    }
+                }
                 setActionBound (referency, x, y, width, height);
                 setActionLayer (referency, 3);
             }
@@ -224,13 +232,20 @@ public class ATKWindowEventListener implements WindowListener {
         else
             if( (component = ac.getAccessibleComponent() )!= null){
                 referency = newAtkComponent(father);
-                Rectangle bound = component.getBounds();
-                int height = (int) bound.getHeight();
-                int width = (int) bound.getWidth();
-                AccessibleContext fatherContext = ac.getAccessibleParent().getAccessibleContext();
-                Point fatherCorner = fatherContext.getAccessibleComponent().getLocation();
-                int x = (int) ( bound.getX() + fatherCorner.getX() );
-                int y = (int) ( bound.getY() + fatherCorner.getY() );
+                int x = 0;
+                int y = 0;
+                int height = 0;
+                int width = 0;
+                Point position = component.getLocationOnScreen();
+                if (position != null){
+                    x = (int) position.getX();
+                    y = (int) position.getY();
+                    Dimension dim = component.getSize();
+                    if (dim != null){
+                        height = (int) dim.getHeight();
+                        width = (int) dim.getWidth();
+                    }
+                }
                 setBound (referency, x, y, width, height);
                 setLayer (referency, 3);
             }
