@@ -171,7 +171,7 @@ public class ATKWindowEventListener implements WindowListener {
 
     void createChildren (AccessibleContext ac, long father){
         String name = ac.getAccessibleName();
-        if (name == null)
+        if (name == null || name.equals(""))
             name=ac.getClass().getSimpleName();
         String description = ac.getAccessibleDescription();
         if (description == null)
