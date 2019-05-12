@@ -25,6 +25,8 @@ AtkRole mapping_role_from_Java(const char * role)
       return ATK_ROLE_PAGE_TAB_LIST;
     if ( strcmp(role,"page tab") == 0 )
       return ATK_ROLE_PAGE_TAB;
+    if ( strcmp(role,"window") == 0 )
+        return ATK_ROLE_WINDOW;
     fprintf(stderr, "%s\n", role);
     g_return_val_if_reached(ATK_ROLE_INVALID);
   }
@@ -70,5 +72,5 @@ AtkLayer simulate_mapping_from_Java (int value)
         return ATK_LAYER_OVERLAY;
     if (value == 7)
         return ATK_LAYER_WINDOW;
-    g_return_val_if_reached(ATK_LAYER_INVALID);        
+    g_return_val_if_reached(ATK_LAYER_INVALID);
 }

@@ -70,6 +70,7 @@ m_atk_component_set_bound (MAtkComponent *self, gint x, gint y, gint width, gint
     priv->rectangle->y = y;
     priv->rectangle->width = width;
     priv->rectangle->height = height;
+    g_signal_emit_by_name (self, "bounds-changed", priv->rectangle, NULL);
 }
 
 void
