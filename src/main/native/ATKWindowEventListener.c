@@ -8,9 +8,9 @@
 #include "mappingEnumerators.h"
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference)
 {
-    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) reference);
     AtkObject *child = ATK_OBJECT ( m_atk_component_new() );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
@@ -18,9 +18,9 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkCompon
 }
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference)
 {
-    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) reference);
     AtkObject *child = ATK_OBJECT ( m_atk_action_new () );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
@@ -28,9 +28,9 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction
 }
 
 JNIEXPORT jlong JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkActionComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong referency)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkActionComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference)
 {
-    MAtkObject *father = M_ATK_OBJECT( (gpointer) referency);
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) reference);
     AtkObject *child = ATK_OBJECT ( m_atk_action_component_new() );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
@@ -38,73 +38,71 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring accessibleRole)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring accessibleRole)
 {
-    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    AtkObject *object = ATK_OBJECT((gpointer) reference);
     const char *utfvalue = (*env)->GetStringUTFChars(env, accessibleRole, NULL);
     AtkRole role = mapping_role_from_Java(utfvalue);
     atk_object_set_role (object, role);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setName (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring name)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setName (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring name)
 {
-    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    AtkObject *object = ATK_OBJECT((gpointer) reference);
     const gchar *utfname = (*env)->GetStringUTFChars(env, name, NULL);
     atk_object_set_name (object, utfname);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setDescription (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring description)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setDescription (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring description)
 {
-    AtkObject *object = ATK_OBJECT((gpointer) refency);
+    AtkObject *object = ATK_OBJECT((gpointer) reference);
     const gchar *utfdescription = (*env)->GetStringUTFChars(env, description, NULL);
     atk_object_set_description (object, utfdescription);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint x, jint y, jint width, jint height)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint x, jint y, jint width, jint height)
 {
-    MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);
+    MAtkComponent *object = M_ATK_COMPONENT((gpointer) reference);
     m_atk_component_set_bound (object, x, y, width, height);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint x, jint y, jint width, jint height)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionBound (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint x, jint y, jint width, jint height)
 {
-    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) refency);
+    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) reference);
     m_atk_action_component_set_bound (object, x, y, width, height);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jstring states)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring states)
 {
-    MAtkObject *object = M_ATK_OBJECT((gpointer) refency);
-    char *utfstates = strdup( (*env)->GetStringUTFChars(env, states, NULL) );
-    const char *delim = ",";
-    char *ptr = strtok(utfstates, delim);
+    MAtkObject *object = M_ATK_OBJECT((gpointer) reference);
+    g_auto(GStrv) strsplit = NULL;
+    gchar **strstates;
     AtkState state = ATK_STATE_INVALID;
-    while(ptr != NULL)
+    strsplit = g_strsplit( (*env)->GetStringUTFChars(env, states, NULL), ",",-1);
+    for ( strstates = strsplit; *strstates; strstates++)
     {
-        state = mapping_state_from_Java (ptr);
+        state = mapping_state_from_Java ( (const char*) *strstates );
         m_atk_object_add_state (object, state);
-		ptr = strtok(NULL, delim);
-	}
-    free(utfstates);
+    }
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint layer)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint layer)
 {
-    MAtkComponent *object = M_ATK_COMPONENT((gpointer) refency);
+    MAtkComponent *object = M_ATK_COMPONENT((gpointer) reference);
     AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
     m_atk_component_set_layer (object, atklayer);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong refency, jint layer)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint layer)
 {
-    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) refency);
+    MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) reference);
     AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
     m_atk_action_component_set_layer (object, atklayer);
 }

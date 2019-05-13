@@ -78,7 +78,7 @@ public class ATKWindowEventListener implements WindowListener {
 
             if (status.containsKey(ac)){
                 TreeNode<Long> position = status.get(ac);
-                //System.err.println("J already contains: "+position.getData().longValue());
+                System.err.println("J already contains: "+position.getData().longValue());
                 if ( nchild > 0 ){
                     for ( int i =0; i < nchild ;i++ ){
                         AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
@@ -125,6 +125,7 @@ public class ATKWindowEventListener implements WindowListener {
                 else{
                     AccessibleContext fatherContext = father.getAccessibleContext();
                     TreeNode<Long> fatherReferency = status.get(fatherContext);
+                    System.err.println("J ac toString(): "+ac.toString());
                     //int index = ac.getAccessibleIndexInParent()
                     createChildren(ac, fatherReferency);
                 }
@@ -208,8 +209,6 @@ public class ATKWindowEventListener implements WindowListener {
         String accessibleRole = ac.getAccessibleRole().toString();
         int nchild = ac.getAccessibleChildrenCount();
         String states = ac.getAccessibleStateSet().toString();
-        if (states == null)
-            System.err.println("J add check on states");
         states = states.replace("[","");
         states = states.replace("]","");
         TreeNode<Long> referency = bindingAtkInterfaces (ac ,father);
