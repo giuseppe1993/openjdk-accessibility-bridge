@@ -75,9 +75,10 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             int nchild = ac.getAccessibleChildrenCount();
+
             if (status.containsKey(ac)){
                 TreeNode<Long> position = status.get(ac);
-
+                //System.err.println("J already contains: "+position.getData().longValue());
                 if ( nchild > 0 ){
                     for ( int i =0; i < nchild ;i++ ){
                         AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
@@ -86,35 +87,46 @@ public class ATKWindowEventListener implements WindowListener {
                 }
             }
             else{
-                String name = ac.getAccessibleName();
-                String description = ac.getAccessibleDescription();
-                String accessibleRole = ac.getAccessibleRole().toString();
-                setRole (frameReferency, accessibleRole);
-                setName (frameReferency, name);
-                setDescription (frameReferency, description);
-                setName (rootReferecy, name);
-                setDescription (rootReferecy, description);
-                AccessibleComponent component = null;
-                if( (component = ac.getAccessibleComponent() )!= null){
-                    Point position = component.getLocationOnScreen();
-                    int x = (int) position.getX();
-                    int y = (int) position.getY();
-                    Dimension dim = component.getSize();
-                    int height = (int) dim.getHeight();
-                    int width = (int) dim.getWidth();
-                    setBound (frameReferency, x, y, width, height);
-                    setLayer (frameReferency, 3);
-                }
-                String states = ac.getAccessibleStateSet().toString();
-                states = states.replace("[","");
-                states = states.replace("]","");
-                setStates (frameReferency, states);
-
-                if ( nchild > 0 ){
-                    for ( int i =0; i < nchild ;i++ ){
-                        AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
-                        createChildren(child, JavaRoot);
+                //System.err.println("J ac toString(): "+ac.toString());
+                Accessible father = ac.getAccessibleParent();
+                if (father == null){
+                    status.put(ac,JavaRoot);
+                    String name = ac.getAccessibleName();
+                    String description = ac.getAccessibleDescription();
+                    String accessibleRole = ac.getAccessibleRole().toString();
+                    setRole (frameReferency, accessibleRole);
+                    setName (frameReferency, name);
+                    setDescription (frameReferency, description);
+                    setName (rootReferecy, name);
+                    setDescription (rootReferecy, description);
+                    AccessibleComponent component = null;
+                    if( (component = ac.getAccessibleComponent() )!= null){
+                        Point position = component.getLocationOnScreen();
+                        int x = (int) position.getX();
+                        int y = (int) position.getY();
+                        Dimension dim = component.getSize();
+                        int height = (int) dim.getHeight();
+                        int width = (int) dim.getWidth();
+                        setBound (frameReferency, x, y, width, height);
+                        setLayer (frameReferency, 3);
                     }
+                    String states = ac.getAccessibleStateSet().toString();
+                    states = states.replace("[","");
+                    states = states.replace("]","");
+                    setStates (frameReferency, states);
+
+                    if ( nchild > 0 ){
+                        for ( int i =0; i < nchild ;i++ ){
+                            AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
+                            createChildren(child, JavaRoot);
+                        }
+                    }
+                }
+                else{
+                    AccessibleContext fatherContext = father.getAccessibleContext();
+                    TreeNode<Long> fatherReferency = status.get(fatherContext);
+                    //int index = ac.getAccessibleIndexInParent()
+                    createChildren(ac, fatherReferency);
                 }
             }
         }
@@ -196,10 +208,13 @@ public class ATKWindowEventListener implements WindowListener {
         String accessibleRole = ac.getAccessibleRole().toString();
         int nchild = ac.getAccessibleChildrenCount();
         String states = ac.getAccessibleStateSet().toString();
+        if (states == null)
+            System.err.println("J add check on states");
         states = states.replace("[","");
         states = states.replace("]","");
         TreeNode<Long> referency = bindingAtkInterfaces (ac ,father);
         long childReferency = referency.getData().longValue();
+        //System.err.println("J ac toString(): "+ac.toString());
         status.put(ac, referency);
         setRole (childReferency, accessibleRole);
         setName (childReferency, name);
@@ -244,12 +259,12 @@ public class ATKWindowEventListener implements WindowListener {
             }
             else
                 referency = newAtkAction(father);
-
+/*
             int count = action.getAccessibleActionCount();
             for ( int i = 0; i < count; i++ ) {
                 String description = action.getAccessibleActionDescription(i);
                 System.err.println("Action n. "+i+" description: "+description);
-            }
+            }*/
         }
         else
             if( (component = ac.getAccessibleComponent() )!= null){
