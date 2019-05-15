@@ -13,8 +13,16 @@
  {
      GList *accessibleActions;
      JNIEnv *env;
+     jmethodID action_method;
      jobject java_action;
  } MAtkActionPrivate;
+
+ struct _RealAction {
+    const char* description;
+    const char* name;
+    const char* keybinding;
+    const char* localizedname;
+  };
 
  static void m_atk_action_atk_action_init (AtkActionIface *iface);
 
@@ -26,14 +34,10 @@ m_atk_action_do_action(AtkAction *action, int index)
     g_return_val_if_fail (M_IS_ATK_ACTION(action), FALSE);
     MAtkActionPrivate *priv = m_atk_action_get_instance_private(M_ATK_ACTION(action));
     //add other check on priv->env and priv->java_action
-    jclass cls = (*priv->env)->GetObjectClass(priv->env, priv->java_action);
-    jmethodID mid = (*priv->env)->GetMethodID(priv->env, cls, "doAccessibleAction", "(I)Z");
-    //int to jint
-    jint i =0;
-    jboolean java_result = (*priv->env)->CallBooleanMethod(priv->env, priv->java_action, mid, i);
-    //jboolean to gboolean
-    gboolean my_result = FALSE;
-    return my_result;
+    //jclass cls = (*priv->env)->GetObjectClass(priv->env, priv->java_action);
+    //jmethodID mid = (*priv->env)->GetMethodID(priv->env, priv->class_action, "doAccessibleAction", "(I)Z");
+    jboolean java_result = (*priv->env)->CallBooleanMethod(priv->env, priv->java_action, priv->action_method, index);
+    return java_result;
 }
 
 static gint
@@ -104,10 +108,11 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
  }
 
  void
- m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jobject obj)
+ m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jmethodID method, jobject obj)
  {
      MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
      priv->env = env;
+     priv->action_method = method;
      priv->java_action = obj;
  }
 
@@ -132,45 +137,62 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
    object_class->finalize = m_atk_action_finalize;
  }
 
- void m_atk_action_add_action(MAtkAction *self, RealAction *action)
+ int m_atk_action_add_action (MAtkAction *self, const char *name, const char *description, const char *keybinding, const char *localizedname)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+   RealAction *action = g_new0 (RealAction, 1);
+   action->name = name;
+   action->description = description;
+   action->keybinding = keybinding;
+   action->localizedname = localizedname;
    priv->accessibleActions = g_list_append (priv->accessibleActions, action);
+   return (int) g_list_index (priv->accessibleActions, action);
  }
 
- void m_atk_action_remove_action(MAtkAction *self, RealAction *action)
+ gboolean m_atk_action_remove_action(MAtkAction *self, int index)
  {
      MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+     g_return_val_if_fail ( (index<0), FALSE);
+     GList *data = g_list_nth (priv->accessibleActions, (guint) index);
+     g_return_val_if_fail (data, FALSE);
+     RealAction *action = (RealAction*) data->data;
      priv->accessibleActions = g_list_remove (priv->accessibleActions, action);
+     return TRUE;
  }
 
- void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name)
+ gboolean m_atk_action_set_name(MAtkAction *self, int index, const char *name)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-   GList *data = g_list_find(priv->accessibleActions, action);
+   g_return_val_if_fail ( (index<0), FALSE);
+   GList *data = g_list_nth (priv->accessibleActions, (guint) index);
+   g_return_val_if_fail (data, FALSE);
    RealAction *realaction = (RealAction*) data->data;
-   g_return_if_fail (realaction);
-   g_free((void*)realaction->name);
+   g_free ((void*)realaction->name);
    realaction->name = name;
+   return TRUE;
  }
- void m_atk_action_set_keybinding(MAtkAction *self, RealAction *action, gchar *keybinding)
+ gboolean m_atk_action_set_keybinding(MAtkAction *self, int index, const char *keybinding)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-   GList *data = g_list_find(priv->accessibleActions, action);
+   g_return_val_if_fail ( (index<0), FALSE);
+   GList *data = g_list_nth (priv->accessibleActions, (guint) index);
+   g_return_val_if_fail (data, FALSE);
    RealAction *realaction = (RealAction*) data->data;
-   g_return_if_fail (realaction);
    g_free((void*)realaction->keybinding);
    realaction->keybinding = keybinding;
+   return TRUE;
  }
 
- void m_atk_action_set_localized_name(MAtkAction *self, RealAction *action, gchar *localizedname)
+ gboolean m_atk_action_set_localized_name(MAtkAction *self, int index, const char *localizedname)
  {
    MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-   GList *data = g_list_find(priv->accessibleActions, action);
+   g_return_val_if_fail ( (index<0), FALSE);
+   GList *data = g_list_nth (priv->accessibleActions, (guint) index);
+   g_return_val_if_fail (data, FALSE);
    RealAction *realaction = (RealAction*) data->data;
-   g_return_if_fail (realaction);
    g_free((void*)realaction->localizedname);
    realaction->localizedname = localizedname;
+   return TRUE;
  }
 
  static void

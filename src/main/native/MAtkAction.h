@@ -24,20 +24,18 @@
 
  typedef struct _RealAction RealAction;
 
- struct _RealAction {
-    const char* description;
-    const char* name;
-    const char* keybinding;
-    const char* localizedname;
-  };
-
  MAtkAction *m_atk_action_new (void);
- void m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jobject obj);
- void m_atk_action_add_action(MAtkAction *self, RealAction *action);
+ void m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jmethodID method, jobject obj);
+ /*void m_atk_action_add_action(MAtkAction *self, RealAction *action);
  void m_atk_action_remove_action(MAtkAction *self, RealAction *action);
  void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name);
  void m_atk_action_set_keybinding(MAtkAction *self, RealAction *action, gchar *keybinding);
- void m_atk_action_set_localized_name(MAtkAction *self, RealAction *action, gchar *localizedname);
+ void m_atk_action_set_localized_name(MAtkAction *self, RealAction *action, gchar *localizedname);*/
+ int m_atk_action_add_action(MAtkAction *self, const char *name, const char *description, const char *keybinding, const char *localizedname);
+ gboolean m_atk_action_remove_action(MAtkAction *self, int index);
+ gboolean m_atk_action_set_name(MAtkAction *self, int index, const char *name);
+ gboolean m_atk_action_set_keybinding(MAtkAction *self, int index, const char *keybinding);
+ gboolean m_atk_action_set_localized_name(MAtkAction *self, int index, const char *localizedname);
 
 
  G_END_DECLS

@@ -111,7 +111,20 @@ JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_saveCallReference (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jobject java_action)
 {
     MAtkAction *object = M_ATK_ACTION((gpointer) reference);
-    m_atk_action_save_java_reference (object, env, java_action);
+    jclass actionClass = (*env)->GetObjectClass(env, java_action);
+    jmethodID mid = (*env)->GetMethodID(env, actionClass, "doAccessibleAction", "(I)Z");
+    m_atk_action_save_java_reference (object, env, mid, java_action);
+}
+
+JNIEXPORT jint JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_addAction (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring name, jstring description, jstring keybinding, jstring localizedname)
+{
+    MAtkAction *object = M_ATK_ACTION((gpointer) reference);
+    const char *utfname = (*env)->GetStringUTFChars(env, name, NULL);
+    const char *utfdesciption = (*env)->GetStringUTFChars(env, description, NULL);
+    const char *utfkeybinding = (*env)->GetStringUTFChars(env, keybinding, NULL);
+    const char *utflocalizedname = (*env)->GetStringUTFChars(env, localizedname, NULL);
+    return m_atk_action_add_action(object, utfname, utfdesciption, utfkeybinding, utflocalizedname);
 }
 
 JNIEXPORT void JNICALL
