@@ -47,6 +47,7 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void setActionBound (long object, int x, int y, int width, int height);
     private static native void setLayer(long object, int layer);
     private static native void setActionLayer(long object, int layer);
+    private static native void saveCallStuff(long object, AccessibleAction action);
 
     private static native void atkFrameClosing(long frameReferency, String description);
     private static native void atkFrameClosed(long frameReferency, String description);
@@ -258,12 +259,13 @@ public class ATKWindowEventListener implements WindowListener {
             }
             else
                 referency = newAtkAction(father);
-/*
+
             int count = action.getAccessibleActionCount();
+            saveCallStuff (referency, action);
             for ( int i = 0; i < count; i++ ) {
                 String description = action.getAccessibleActionDescription(i);
                 System.err.println("Action n. "+i+" description: "+description);
-            }*/
+            }
         }
         else
             if( (component = ac.getAccessibleComponent() )!= null){

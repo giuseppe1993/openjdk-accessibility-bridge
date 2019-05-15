@@ -12,18 +12,36 @@
  typedef struct
  {
      GList *accessibleActions;
+     JNIEnv *env;
+     jobject java_action;
  } MAtkActionPrivate;
 
  static void m_atk_action_atk_action_init (AtkActionIface *iface);
 
  G_DEFINE_TYPE_WITH_CODE (MAtkAction, m_atk_action, M_TYPE_ATK_OBJECT, { G_ADD_PRIVATE (MAtkAction); G_IMPLEMENT_INTERFACE (atk_action_get_type(), m_atk_action_atk_action_init); })
 
+static gboolean
+m_atk_action_do_action(AtkAction *action, int index)
+{
+    g_return_val_if_fail (M_IS_ATK_ACTION(action), FALSE);
+    MAtkActionPrivate *priv = m_atk_action_get_instance_private(M_ATK_ACTION(action));
+    //add other check on priv->env and priv->java_action
+    jclass cls = (*priv->env)->GetObjectClass(priv->env, priv->java_action);
+    jmethodID mid = (*priv->env)->GetMethodID(priv->env, cls, "doAccessibleAction", "(I)Z");
+    //int to jint
+    jint i =0;
+    jboolean java_result = (*priv->env)->CallBooleanMethod(priv->env, priv->java_action, mid, i);
+    //jboolean to gboolean
+    gboolean my_result = FALSE;
+    return my_result;
+}
+
 static gint
 m_atk_action_get_n_actions(AtkAction *action)
 {
-  g_return_val_if_fail (M_IS_ATK_ACTION(action), -1);
-  MAtkActionPrivate *priv = m_atk_action_get_instance_private(M_ATK_ACTION(action));
-  return g_list_length(priv->accessibleActions);
+    g_return_val_if_fail (M_IS_ATK_ACTION(action), -1);
+    MAtkActionPrivate *priv = m_atk_action_get_instance_private(M_ATK_ACTION(action));
+    return g_list_length(priv->accessibleActions);
 }
 
 static const gchar*
@@ -69,6 +87,7 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
  static void
  m_atk_action_atk_action_init (AtkActionIface *iface)
  {
+     iface->do_action = m_atk_action_do_action;
      iface->get_n_actions = m_atk_action_get_n_actions;
      iface->get_description = m_atk_action_get_description;
      iface->get_name = m_atk_action_get_name;
@@ -82,6 +101,14 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
     MAtkAction *action = g_object_new (M_TYPE_ATK_ACTION, NULL);
     atk_object_initialize (ATK_OBJECT(action), NULL);
     return action;
+ }
+
+ void
+ m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jobject obj)
+ {
+     MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+     priv->env = env;
+     priv->java_action = obj;
  }
 
  static void
@@ -113,8 +140,8 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
 
  void m_atk_action_remove_action(MAtkAction *self, RealAction *action)
  {
-   MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-   priv->accessibleActions = g_list_remove (priv->accessibleActions, action);
+     MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
+     priv->accessibleActions = g_list_remove (priv->accessibleActions, action);
  }
 
  void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name)
@@ -151,4 +178,6 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
  {
      MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
      priv->accessibleActions = NULL;
+     priv->env = NULL;
+     priv->java_action = NULL;
  }

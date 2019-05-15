@@ -108,6 +108,13 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLay
 }
 
 JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_saveCallReference (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jobject java_action)
+{
+    MAtkAction *object = M_ATK_ACTION((gpointer) reference);
+    m_atk_action_save_java_reference (object, env, java_action);
+}
+
+JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_atkFrameClosing (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong cObject, jstring description)
 {
 

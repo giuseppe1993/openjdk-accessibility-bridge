@@ -8,6 +8,7 @@
  #define DEMO_ACTION_H_
 
  #include <atk/atk.h>
+ #include <jni.h>
  #include "MAtkObject.h"
 
  G_BEGIN_DECLS
@@ -31,6 +32,7 @@
   };
 
  MAtkAction *m_atk_action_new (void);
+ void m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jobject obj);
  void m_atk_action_add_action(MAtkAction *self, RealAction *action);
  void m_atk_action_remove_action(MAtkAction *self, RealAction *action);
  void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name);
