@@ -55,23 +55,31 @@ AtkState mapping_state_from_Java(const char *state)
     g_return_val_if_reached(ATK_STATE_INVALID);
 }
 
-AtkLayer simulate_mapping_from_Java (int value)
+AtkLayer mapping_layer_from_Java_role (const char * role)
 {
-    if (value == 0)
-        return ATK_LAYER_INVALID;
-    if (value == 1)
+    if ( strcmp(role,"some other role")  == 0 )
         return ATK_LAYER_BACKGROUND;
-    if (value == 2)
+    if ( strcmp(role,"canvas")  == 0 )
         return ATK_LAYER_CANVAS;
-    if (value == 3)
+    if ( ( strcmp(role,"panel") == 0 ) ||
+        ( strcmp(role,"check box") == 0 ) ||
+        ( strcmp(role,"menu bar") == 0 ) ||
+        ( strcmp(role,"menu") == 0 ) ||
+        ( strcmp(role,"menu item") == 0 ) ||
+        ( strcmp(role,"check box") == 0 ) ||
+        ( strcmp(role,"separator") == 0 ) ||
+        ( strcmp(role,"page tab list") == 0 ) ||
+        ( strcmp(role,"page tab") == 0 ) )
         return ATK_LAYER_WIDGET;
-    if (value == 4)
+    if ( ( strcmp(role,"root pane") == 0 ) ||
+        ( strcmp(role,"layered pane") == 0 ) )
         return ATK_LAYER_MDI;
-    if (value == 5)
+    if ( ( strcmp(role,"window") == 0 ) ||
+        ( strcmp(role,"popup menu")  == 0 ) )
         return ATK_LAYER_POPUP;
-    if (value == 6)
-        return ATK_LAYER_OVERLAY;
-    if (value == 7)
+    if ( strcmp(role,"frame") == 0 )
         return ATK_LAYER_WINDOW;
+    if ( strcmp(role,"unknown") == 0 )
+        return ATK_LAYER_INVALID;
     g_return_val_if_reached(ATK_LAYER_INVALID);
 }

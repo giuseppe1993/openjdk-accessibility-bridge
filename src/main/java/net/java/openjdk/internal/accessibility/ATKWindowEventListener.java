@@ -45,8 +45,8 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void setStates (long object, String states);
     private static native void setBound (long object, int x, int y, int width, int height);
     private static native void setActionBound (long object, int x, int y, int width, int height);
-    private static native void setLayer(long object, int layer);
-    private static native void setActionLayer(long object, int layer);
+    private static native void setLayer(long object, String role);
+    private static native void setActionLayer(long object, String role);
     private static native void saveCallReference(long object, AccessibleAction action);
     private static native int addAction (long object, String name, String description, String keybinding, String localizedname);
 
@@ -89,7 +89,6 @@ public class ATKWindowEventListener implements WindowListener {
                 }
             }
             else{
-                //System.err.println("J ac toString(): "+ac.toString());
                 Accessible father = ac.getAccessibleParent();
                 if (father == null){
                     status.put(ac,JavaRoot);
@@ -110,7 +109,7 @@ public class ATKWindowEventListener implements WindowListener {
                         int height = (int) dim.getHeight();
                         int width = (int) dim.getWidth();
                         setBound (frameReferency, x, y, width, height);
-                        setLayer (frameReferency, 3);
+                        setLayer (frameReferency, accessibleRole);
                     }
                     String states = ac.getAccessibleStateSet().toString();
                     states = states.replace("[","");
@@ -128,7 +127,6 @@ public class ATKWindowEventListener implements WindowListener {
                     AccessibleContext fatherContext = father.getAccessibleContext();
                     TreeNode<Long> fatherReferency = status.get(fatherContext);
                     System.err.println("J ac toString(): "+ac.toString());
-                    //int index = ac.getAccessibleIndexInParent()
                     createChildren(ac, fatherReferency);
                 }
             }
@@ -213,9 +211,8 @@ public class ATKWindowEventListener implements WindowListener {
         String states = ac.getAccessibleStateSet().toString();
         states = states.replace("[","");
         states = states.replace("]","");
-        TreeNode<Long> referency = bindingAtkInterfaces (ac ,father);
+        TreeNode<Long> referency = bindingAtkInterfaces (ac ,father, accessibleRole);
         long childReferency = referency.getData().longValue();
-        //System.err.println("J ac toString(): "+ac.toString());
         status.put(ac, referency);
         setRole (childReferency, accessibleRole);
         setName (childReferency, name);
@@ -229,7 +226,7 @@ public class ATKWindowEventListener implements WindowListener {
         }
     }
 
-    private TreeNode<Long> bindingAtkInterfaces (AccessibleContext ac, TreeNode<Long> fatherReferency){
+    private TreeNode<Long> bindingAtkInterfaces (AccessibleContext ac, TreeNode<Long> fatherReferency, String role){
         long referency = 0;
         long father = fatherReferency.getData().longValue();
         TreeNode<Long> nodeReferency = null;
@@ -256,7 +253,7 @@ public class ATKWindowEventListener implements WindowListener {
                     }
                 }
                 setActionBound (referency, x, y, width, height);
-                setActionLayer (referency, 3);
+                setActionLayer (referency, role);
             }
             else
                 referency = newAtkAction(father);
@@ -286,7 +283,7 @@ public class ATKWindowEventListener implements WindowListener {
                     }
                 }
                 setBound (referency, x, y, width, height);
-                setLayer (referency, 3);
+                setLayer (referency, role);
             }
         nodeReferency = new TreeNode<Long> (referency);
         return nodeReferency;

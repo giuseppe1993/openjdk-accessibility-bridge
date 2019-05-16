@@ -41,8 +41,8 @@ JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setRole (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring accessibleRole)
 {
     AtkObject *object = ATK_OBJECT((gpointer) reference);
-    const char *utfvalue = (*env)->GetStringUTFChars(env, accessibleRole, NULL);
-    AtkRole role = mapping_role_from_Java(utfvalue);
+    const char *utfRole = (*env)->GetStringUTFChars(env, accessibleRole, NULL);
+    AtkRole role = mapping_role_from_Java(utfRole);
     atk_object_set_role (object, role);
 }
 
@@ -92,18 +92,20 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setStates (J
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint layer)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring accessibleRole)
 {
     MAtkComponent *object = M_ATK_COMPONENT((gpointer) reference);
-    AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
+    const char *utfRole = (*env)->GetStringUTFChars (env, accessibleRole, NULL);
+    AtkLayer atklayer = mapping_layer_from_Java_role (utfRole);
     m_atk_component_set_layer (object, atklayer);
 }
 
 JNIEXPORT void JNICALL
-Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jint layer)
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setActionLayer (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jstring accessibleRole)
 {
     MAtkActionComponent *object = M_ATK_ACTION_COMPONENT((gpointer) reference);
-    AtkLayer atklayer = simulate_mapping_from_Java( (int)layer );
+    const char *utfRole = (*env)->GetStringUTFChars (env, accessibleRole, NULL);
+    AtkLayer atklayer = mapping_layer_from_Java_role (utfRole);
     m_atk_action_component_set_layer (object, atklayer);
 }
 
@@ -113,7 +115,7 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_saveCallRefe
     MAtkAction *object = M_ATK_ACTION((gpointer) reference);
     jobject g_java_action = (*env)->NewGlobalRef (env, java_action);
     JavaVM *jvm;
-    int status = (*env)->GetJavaVM (env, &jvm);
+    (*env)->GetJavaVM (env, &jvm);
     jclass gActionClass = (*env)->GetObjectClass(env, g_java_action);
     jmethodID g_mid = (*env)->GetMethodID(env, gActionClass, "doAccessibleAction", "(I)Z");
     m_atk_action_save_java_reference (object, jvm, g_mid, g_java_action);
