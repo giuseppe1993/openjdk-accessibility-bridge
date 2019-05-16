@@ -25,7 +25,7 @@
  typedef struct _RealAction RealAction;
 
  MAtkAction *m_atk_action_new (void);
- void m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jmethodID method, jobject obj);
+ void m_atk_action_save_java_reference(MAtkAction *self, JavaVM *jvm, jmethodID method, jobject obj);
  /*void m_atk_action_add_action(MAtkAction *self, RealAction *action);
  void m_atk_action_remove_action(MAtkAction *self, RealAction *action);
  void m_atk_action_set_name(MAtkAction *self, RealAction *action, gchar *name);

@@ -111,9 +111,12 @@ JNIEXPORT void JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_saveCallReference (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jobject java_action)
 {
     MAtkAction *object = M_ATK_ACTION((gpointer) reference);
-    jclass actionClass = (*env)->GetObjectClass(env, java_action);
-    jmethodID mid = (*env)->GetMethodID(env, actionClass, "doAccessibleAction", "(I)Z");
-    m_atk_action_save_java_reference (object, env, mid, java_action);
+    jobject g_java_action = (*env)->NewGlobalRef (env, java_action);
+    JavaVM *jvm;
+    int status = (*env)->GetJavaVM (env, &jvm);
+    jclass gActionClass = (*env)->GetObjectClass(env, g_java_action);
+    jmethodID g_mid = (*env)->GetMethodID(env, gActionClass, "doAccessibleAction", "(I)Z");
+    m_atk_action_save_java_reference (object, jvm, g_mid, g_java_action);
 }
 
 JNIEXPORT jint JNICALL

@@ -12,7 +12,7 @@
  typedef struct
  {
      GList *accessibleActions;
-     JNIEnv *env;
+     JavaVM *jvm;
      jmethodID action_method;
      jobject java_action;
  } MAtkActionPrivate;
@@ -33,10 +33,12 @@ m_atk_action_do_action(AtkAction *action, int index)
 {
     g_return_val_if_fail (M_IS_ATK_ACTION(action), FALSE);
     MAtkActionPrivate *priv = m_atk_action_get_instance_private(M_ATK_ACTION(action));
+    JNIEnv *env;
+    (*priv->jvm)->GetEnv (priv->jvm, (void **)&env, JNI_VERSION_1_6);
+    (*priv->jvm)->AttachCurrentThread (priv->jvm, (void **)&env, NULL);
     //add other check on priv->env and priv->java_action
-    //jclass cls = (*priv->env)->GetObjectClass(priv->env, priv->java_action);
-    //jmethodID mid = (*priv->env)->GetMethodID(priv->env, priv->class_action, "doAccessibleAction", "(I)Z");
-    jboolean java_result = (*priv->env)->CallBooleanMethod(priv->env, priv->java_action, priv->action_method, index);
+    jboolean java_result = (*env)->CallBooleanMethod (env, priv->java_action, priv->action_method, index);
+    (*priv->jvm)->DetachCurrentThread (priv->jvm);
     return java_result;
 }
 
@@ -108,12 +110,13 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
  }
 
  void
- m_atk_action_save_java_reference(MAtkAction *self, JNIEnv *env, jmethodID method, jobject obj)
+ m_atk_action_save_java_reference(MAtkAction *self, JavaVM *jvm, jmethodID method, jobject obj)
  {
      MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
-     priv->env = env;
+     priv->jvm = jvm;
      priv->action_method = method;
      priv->java_action = obj;
+     //fprintf(stderr, "JNIEnv: %ld\tjobject: %ld\tjmethodID: %ld\n", priv->env, priv->java_action, priv->action_method);
  }
 
  static void
@@ -200,6 +203,6 @@ m_atk_action_get_localized_name(AtkAction *action, gint i)
  {
      MAtkActionPrivate *priv = m_atk_action_get_instance_private(self);
      priv->accessibleActions = NULL;
-     priv->env = NULL;
+     priv->jvm = NULL;
      priv->java_action = NULL;
  }
