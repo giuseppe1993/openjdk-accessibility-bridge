@@ -50,6 +50,7 @@ public class AccessBridge {
 
     public AccessBridge() {
         EventQueueMonitor.isGUIInitialized();
-        SwingEventMonitor.addWindowListener(new ATKWindowEventListener(atkRoot));
+        ATKWindowEventListener mediatorAtk = new ATKWindowEventListener(atkRoot);
+        SwingEventMonitor.addWindowListener(mediatorAtk);
     }
 }

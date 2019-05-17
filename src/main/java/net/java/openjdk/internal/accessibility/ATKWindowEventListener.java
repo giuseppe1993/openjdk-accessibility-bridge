@@ -32,7 +32,13 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.HashMap;
 
-import javax.accessibility.*;
+import javax.accessibility.Accessible;
+import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleAction;
+import javax.accessibility.AccessibleComponent;
+import javax.accessibility.AccessibleSelection;
+import javax.accessibility.AccessibleRelationSet;
+
 
 public class ATKWindowEventListener implements WindowListener {
 
