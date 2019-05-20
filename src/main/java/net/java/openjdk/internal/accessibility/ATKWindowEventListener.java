@@ -42,9 +42,9 @@ import javax.accessibility.AccessibleRelationSet;
 
 public class ATKWindowEventListener implements WindowListener {
 
-    private static native long newAtkComponent (long referency);
-    private static native long newAtkAction (long referency);
-    private static native long newAtkActionComponent (long referency);
+    private static native long newAtkComponent (long father);
+    private static native long newAtkAction (long father);
+    private static native long newAtkActionComponent (long father);
     private static native void setRole (long object, String role);
     private static native void setName (long object, String name);
     private static native void setDescription (long object, String description);
@@ -56,24 +56,24 @@ public class ATKWindowEventListener implements WindowListener {
     private static native void saveCallReference(long object, AccessibleAction action);
     private static native int addAction (long object, String name, String description, String keybinding, String localizedname);
 
-    private static native void atkFrameClosing(long frameReferency, String description);
-    private static native void atkFrameClosed(long frameReferency, String description);
-    private static native void atkFrameIconified(long frameReferency, String description);
-    private static native void atkFrameDeiconified(long frameReferency, String description);
-    private static native void atkFrameActivated(long frameReferency, String description);
-    private static native void atkFrameDeactivated(long frameReferency, String description);
+    private static native void atkFrameClosing(long frameReference, String description);
+    private static native void atkFrameClosed(long frameReference, String description);
+    private static native void atkFrameIconified(long frameReference, String description);
+    private static native void atkFrameDeiconified(long frameReference, String description);
+    private static native void atkFrameActivated(long frameReference, String description);
+    private static native void atkFrameDeactivated(long frameReference, String description);
 
-    private long frameReferency, rootReferecy;
+    private long frameReference, rootReferecy;
     TreeNode<Long> JavaRoot = null;
     HashMap<AccessibleContext,TreeNode> status = null;
 
 	public ATKWindowEventListener(long root) {
         super();
         rootReferecy = root;
-        frameReferency = newAtkComponent(root);
-        JavaRoot = new TreeNode<Long>(frameReferency);
+        frameReference = newAtkComponent(root);
+        JavaRoot = new TreeNode<Long>(frameReference);
         status = new HashMap<AccessibleContext,TreeNode>();
-        System.err.println("J Mediator Root referency: "+root+" Java Frame Root: "+frameReferency);
+        System.err.println("J Mediator Root reference: "+root+" Java Frame Root: "+frameReference);
     }
 
     @Override
@@ -101,9 +101,9 @@ public class ATKWindowEventListener implements WindowListener {
                     String name = ac.getAccessibleName();
                     String description = ac.getAccessibleDescription();
                     String accessibleRole = ac.getAccessibleRole().toString();
-                    setRole (frameReferency, accessibleRole);
-                    setName (frameReferency, name);
-                    setDescription (frameReferency, description);
+                    setRole (frameReference, accessibleRole);
+                    setName (frameReference, name);
+                    setDescription (frameReference, description);
                     setName (rootReferecy, name);
                     setDescription (rootReferecy, description);
                     AccessibleComponent component = null;
@@ -114,13 +114,13 @@ public class ATKWindowEventListener implements WindowListener {
                         Dimension dim = component.getSize();
                         int height = (int) dim.getHeight();
                         int width = (int) dim.getWidth();
-                        setBound (frameReferency, x, y, width, height);
-                        setLayer (frameReferency, accessibleRole);
+                        setBound (frameReference, x, y, width, height);
+                        setLayer (frameReference, accessibleRole);
                     }
                     String states = ac.getAccessibleStateSet().toString();
                     states = states.replace("[","");
                     states = states.replace("]","");
-                    setStates (frameReferency, states);
+                    setStates (frameReference, states);
 
                     if ( nchild > 0 ){
                         for ( int i =0; i < nchild ;i++ ){
@@ -131,9 +131,9 @@ public class ATKWindowEventListener implements WindowListener {
                 }
                 else{
                     AccessibleContext fatherContext = father.getAccessibleContext();
-                    TreeNode<Long> fatherReferency = status.get(fatherContext);
+                    TreeNode<Long> fatherReference = status.get(fatherContext);
                     System.err.println("J ac toString(): "+ac.toString());
-                    createChildren(ac, fatherReferency);
+                    createChildren(ac, fatherReference);
                 }
             }
         }
@@ -146,7 +146,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameClosing(frameReferency, description);
+            atkFrameClosing(frameReference, description);
         }
     }
 
@@ -157,7 +157,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameClosed(frameReferency, description);
+            atkFrameClosed(frameReference, description);
         }
     }
 
@@ -168,7 +168,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameIconified(frameReferency, description);
+            atkFrameIconified(frameReference, description);
         }
     }
 
@@ -179,7 +179,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameDeiconified(frameReferency, description);
+            atkFrameDeiconified(frameReference, description);
         }
     }
 
@@ -190,7 +190,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameActivated(frameReferency, description);
+            atkFrameActivated(frameReference, description);
         }
     }
 
@@ -201,7 +201,7 @@ public class ATKWindowEventListener implements WindowListener {
             Accessible accessibleFrame = (Accessible) frame;
             AccessibleContext ac = accessibleFrame.getAccessibleContext();
             String description= ac.getAccessibleDescription();
-            atkFrameDeactivated(frameReferency, description);
+            atkFrameDeactivated(frameReference, description);
         }
     }
 
@@ -217,25 +217,25 @@ public class ATKWindowEventListener implements WindowListener {
         String states = ac.getAccessibleStateSet().toString();
         states = states.replace("[","");
         states = states.replace("]","");
-        TreeNode<Long> referency = bindingAtkInterfaces (ac ,father, accessibleRole);
-        long childReferency = referency.getData().longValue();
-        status.put(ac, referency);
-        setRole (childReferency, accessibleRole);
-        setName (childReferency, name);
-        setDescription (childReferency, description);
-        setStates (childReferency, states);
+        TreeNode<Long> reference = bindingAtkInterfaces (ac ,father, accessibleRole);
+        long childReference = reference.getData().longValue();
+        status.put(ac, reference);
+        setRole (childReference, accessibleRole);
+        setName (childReference, name);
+        setDescription (childReference, description);
+        setStates (childReference, states);
         if ( nchild > 0 ){
             for ( int i =0; i < nchild ;i++ ){
                 AccessibleContext child = ac.getAccessibleChild(i).getAccessibleContext();
-                createChildren(child ,referency);
+                createChildren(child ,reference);
             }
         }
     }
 
-    private TreeNode<Long> bindingAtkInterfaces (AccessibleContext ac, TreeNode<Long> fatherReferency, String role){
+    private TreeNode<Long> bindingAtkInterfaces (AccessibleContext ac, TreeNode<Long> fatherReference, String role){
         long referency = 0;
-        long father = fatherReferency.getData().longValue();
-        TreeNode<Long> nodeReferency = null;
+        long father = fatherReference.getData().longValue();
+        TreeNode<Long> nodeReference = null;
         AccessibleAction action = null;
         AccessibleComponent component = null;
         AccessibleSelection selection = null;
@@ -291,8 +291,8 @@ public class ATKWindowEventListener implements WindowListener {
                 setBound (referency, x, y, width, height);
                 setLayer (referency, role);
             }
-        nodeReferency = new TreeNode<Long> (referency);
-        return nodeReferency;
+        nodeReference = new TreeNode<Long> (referency);
+        return nodeReference;
     }
 
 }
