@@ -2,7 +2,7 @@
 #include "mappingEnumerators.h"
 
 AtkRole mapping_role_from_Java(const char * role)
-  {
+{
     if ( strcmp(role,"frame") == 0 )
       return ATK_ROLE_FRAME;
     if ( strcmp(role,"root pane") == 0 )
@@ -30,7 +30,7 @@ AtkRole mapping_role_from_Java(const char * role)
     if ( strcmp(role,"popup menu")  == 0 )
         return ATK_ROLE_POPUP_MENU;
     g_return_val_if_reached(ATK_ROLE_INVALID);
-  }
+}
 
 AtkState mapping_state_from_Java(const char *state)
 {

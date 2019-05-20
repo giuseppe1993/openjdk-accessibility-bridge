@@ -48,9 +48,9 @@
  MAtkActionComponent *
  m_atk_action_component_new (void)
  {
-    MAtkActionComponent *actioncomponent = g_object_new (M_TYPE_ATK_ACTION_COMPONENT, NULL);
-    atk_object_initialize (ATK_OBJECT(actioncomponent), NULL);
-    return actioncomponent;
+     MAtkActionComponent *actioncomponent = g_object_new (M_TYPE_ATK_ACTION_COMPONENT, NULL);
+     atk_object_initialize (ATK_OBJECT(actioncomponent), NULL);
+     return actioncomponent;
  }
 
  void
@@ -83,7 +83,8 @@
  m_atk_action_component_finalize (GObject *object)
  {
  	g_return_if_fail (M_IS_ATK_ACTION_COMPONENT(object));
-
+    MAtkActionComponentPrivate *priv = m_atk_action_component_get_instance_private(M_ATK_ACTION_COMPONENT(object));
+    g_free ( (void*)priv->rectangle );
  	G_OBJECT_CLASS (m_atk_action_component_parent_class)->finalize (object);
  }
 
@@ -91,7 +92,6 @@
  m_atk_action_component_class_init (MAtkActionComponentClass *klass)
  {
    GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
    object_class->finalize = m_atk_action_component_finalize;
  }
 

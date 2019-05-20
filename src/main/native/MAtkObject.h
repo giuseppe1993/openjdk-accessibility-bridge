@@ -19,7 +19,7 @@ G_DECLARE_DERIVABLE_TYPE(MAtkObject, m_atk_object, M, ATK_OBJECT, AtkObject)
 
 struct _MAtkObjectClass
 {
-  AtkObjectClass parent_class;
+    AtkObjectClass parent_class;
 };
 
 MAtkObject *m_atk_object_new (void);

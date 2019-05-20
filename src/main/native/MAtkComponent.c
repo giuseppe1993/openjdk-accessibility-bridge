@@ -86,16 +86,16 @@ static void
 m_atk_component_finalize (GObject *object)
 {
 	g_return_if_fail (M_IS_ATK_COMPONENT(object));
-
+    MAtkComponentPrivate *priv = m_atk_component_get_instance_private(M_ATK_COMPONENT(object));
+    g_free ( (void*)priv->rectangle );
 	G_OBJECT_CLASS (m_atk_component_parent_class)->finalize (object);
 }
 
 static void
 m_atk_component_class_init (MAtkComponentClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = m_atk_component_finalize;
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    object_class->finalize = m_atk_component_finalize;
 }
 
 static void
