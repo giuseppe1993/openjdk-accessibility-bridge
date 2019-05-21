@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <atk/atk.h>
 #include "mediatorAtk.h"
-#include "mappingEnumerators.h"
 
 JNIEXPORT jlong JNICALL
 Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkComponent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference)
@@ -32,6 +31,16 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkAction
 {
     MAtkObject *father = M_ATK_OBJECT( (gpointer) reference);
     AtkObject *child = ATK_OBJECT ( m_atk_action_component_new() );
+    m_atk_object_add_child (father, child);
+    g_object_ref (child);
+    return (jlong) child;
+}
+
+JNIEXPORT jlong JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_newAtkActionComponentValue (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference)
+{
+    MAtkObject *father = M_ATK_OBJECT( (gpointer) reference);
+    AtkObject *child = ATK_OBJECT ( m_atk_action_component_value_new() );
     m_atk_object_add_child (father, child);
     g_object_ref (child);
     return (jlong) child;
@@ -130,6 +139,27 @@ Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_addAction (J
     const char *utfkeybinding = (*env)->GetStringUTFChars(env, keybinding, NULL);
     const char *utflocalizedname = (*env)->GetStringUTFChars(env, localizedname, NULL);
     return m_atk_action_add_action(object, utfname, utfdesciption, utfkeybinding, utflocalizedname);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setMax (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jdouble max)
+{
+    MAtkActionComponentValue *object = M_ATK_ACTION_COMPONENT_VALUE((gpointer) reference);
+    m_atk_action_component_value_set_max (object, max);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setMin (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jdouble min)
+{
+    MAtkActionComponentValue *object = M_ATK_ACTION_COMPONENT_VALUE((gpointer) reference);
+    m_atk_action_component_value_set_min (object, min);
+}
+
+JNIEXPORT void JNICALL
+Java_net_java_openjdk_internal_accessibility_ATKWindowEventListener_setCurrent (JNIEnv *env, jclass ATKWindowEventListenerclass, jlong reference, jdouble current)
+{
+    MAtkActionComponentValue *object = M_ATK_ACTION_COMPONENT_VALUE((gpointer) reference);
+    m_atk_action_component_value_set_current (object, current);
 }
 
 JNIEXPORT void JNICALL

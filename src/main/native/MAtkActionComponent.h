@@ -1,11 +1,11 @@
 /*
- * catkactioncomponent.h
+ * MAtkActionComponent.h
  *
  *  Created on: May 3, 2019
  *      Author: giuseppe
  */
-#ifndef DEMO_ACTION_COMPONENT_H_
-#define DEMO_ACTION_COMPONENT_H_
+#ifndef MEDIATOR_ACTION_COMPONENT_H_
+#define MEDIATOR_ACTION_COMPONENT_H_
 
 #include <atk/atk.h>
 #include "MAtkAction.h"

@@ -2,3 +2,5 @@
 #include "MAtkComponent.h"
 #include "MAtkAction.h"
 #include "MAtkActionComponent.h"
+#include "MAtkActionComponentValue.h"
+#include "mappingEnumerators.h"
